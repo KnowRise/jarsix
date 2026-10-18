@@ -164,6 +164,77 @@
   };
 
   // =========================================================================
+  // 2b. Tag Filter Pills - Show More / Show Less Toggle
+  // =========================================================================
+  const initTagsToggle = () => {
+    const bar = document.getElementById('tags-filter-bar');
+    const toggleBtn = document.getElementById('tags-toggle-btn');
+    if (!bar || !toggleBtn) return;
+
+    const wrap = bar.closest('.tags-filter-wrap');
+    const labelEl = toggleBtn.querySelector('.tags-toggle-label');
+    const LABEL_MORE = 'Tampilkan lebih banyak';
+    const LABEL_LESS = 'Tampilkan lebih sedikit';
+
+    const measureRowHeight = () => {
+      const firstPill = bar.querySelector('.tag-pill');
+      if (!firstPill) return;
+      bar.style.setProperty('--tags-row-h', `${firstPill.offsetHeight}px`);
+    };
+
+    const getCollapsedHeight = () => {
+      const rowH = parseFloat(bar.style.getPropertyValue('--tags-row-h')) || 32;
+      const rootFs = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      // Mirror of CSS: calc(2 * var(--tags-row-h) + 0.75rem)
+      return 2 * rowH + 0.75 * rootFs;
+    };
+
+    const updateState = () => {
+      const collapsed = bar.classList.contains('is-collapsed');
+
+      if (collapsed) {
+        // Compare against content height (scrollHeight), NOT clientHeight:
+        // clientHeight is mid-animation right after collapsing, which used to
+        // hide the toggle permanently.
+        const overflowing = bar.scrollHeight > getCollapsedHeight() + 2;
+        if (wrap) wrap.classList.toggle('has-overflow', overflowing);
+        toggleBtn.hidden = !overflowing;
+      } else {
+        toggleBtn.hidden = false;
+      }
+    };
+
+    toggleBtn.addEventListener('click', () => {
+      const expanding = bar.classList.contains('is-collapsed');
+      bar.classList.toggle('is-expanded', expanding);
+      bar.classList.toggle('is-collapsed', !expanding);
+      toggleBtn.setAttribute('aria-expanded', String(expanding));
+      if (labelEl) labelEl.textContent = expanding ? LABEL_LESS : LABEL_MORE;
+      updateState();
+    });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimer);
+      resizeTimer = setTimeout(() => {
+        measureRowHeight();
+        updateState();
+      }, 150);
+    });
+
+    measureRowHeight();
+    updateState();
+
+    // Re-check once webfonts finish loading (pill height can change)
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        measureRowHeight();
+        updateState();
+      });
+    }
+  };
+
+  // =========================================================================
   // 3. Consecutive Image Collage Generator
   // =========================================================================
   const initImageCollages = () => {
@@ -423,6 +494,7 @@
   document.addEventListener('DOMContentLoaded', () => {
     initTheme();
     initSearchAndSort();
+    initTagsToggle();
     initImageCollages();
   });
 })();
