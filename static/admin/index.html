@@ -3,12 +3,41 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark light" />
     <title>Content Manager</title>
     <!-- Explicitly set the config URL so Decap CMS never fails on /admin or /admin/ -->
     <link rel="cms-config-url" type="text/yaml" href="/admin/config.yml" />
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+      /* Cegah flash putih sebelum React/decak me-render. */
+      html { background-color: #f8fafc; }
+      html[data-theme="dark"] { background-color: #0d1117; }
+      #nc-root { min-height: 100vh; }
+    </style>
+    <script>
+      /* Samakan preferensi tema dengan theme toggle di blog (localStorage key: 'theme'). */
+      (function () {
+        var theme;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch (e) {}
+        if (theme !== 'dark' && theme !== 'light') {
+          theme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+            ? 'dark'
+            : 'light';
+        }
+        document.documentElement.setAttribute('data-theme', theme);
+        /* Registrasi preview template dulu, baru init (lihat /admin/preview.js). */
+        window.CMS_MANUAL_INIT = true;
+      })();
+    </script>
   </head>
   <body>
-    <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+    <script src="https://unpkg.com/decap-cms@3.17.1/dist/decap-cms.js"></script>
+    <!-- Dimuat paling akhir agar menang tie-break cascade atas style emotion Decap. -->
+    <link rel="stylesheet" href="/admin/theme.css" />
+    <script src="https://unpkg.com/marked@12.0.2/marked.min.js"></script>
+    <script src="/admin/theme.js"></script>
+    <script src="/admin/preview.js"></script>
   </body>
 </html>

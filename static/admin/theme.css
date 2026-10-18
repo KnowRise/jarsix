@@ -1,0 +1,1288 @@
+/* ==========================================================================
+   Decap CMS admin theme — mytheme (brand #D98327)
+   --------------------------------------------------------------------------
+   - Tema gelap diadaptasi dari dark.css komunitas:
+       https://github.com/Nats-ji/netlify-cms-dark-mode
+       https://stra.studio/cms/dark.css (micvolo)
+     Di-scope ulang ke `html[data-theme="dark"]` (bukan prefers-color-scheme) supaya
+     bisa di-toggle manual oleh /admin/theme.js, dan tokennya di-map ke palet blog.
+   - Diuji untuk Decap CMS 3.17.1 (versi di-pin di /admin/index.html).
+   - Selector bertumpu pada label emotion (mis. [class*="PublishButton"]); sebagian
+     selector memakai hash class spesifik versi. WAJIB dicek ulang saat upgrade Decap.
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   1. Token brand (light)
+   -------------------------------------------------------------------------- */
+:root {
+  --accent: #D98327;
+  --accent-hover: #b86915;
+  --accent-light: rgba(217, 131, 39, 0.14);
+  --accent-text: #965008;
+  --brand-font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --brand-font-heading: 'Outfit', var(--brand-font-sans);
+
+  /* Pemetaan token Decap (light) — hanya dipakai oleh rule brand di bawah */
+  --body-bg-color: #f8fafc;
+  --primary-text-color: #0f172a;
+  --secondary-text-color: #475569;
+  --disabled-text-color: #94a3b8;
+  --url-text-color: #965008;
+  --input-bg-color: #ffffff;
+  --input-border-color: #e2e8f0;
+  --input-placeholder-color: #94a3b8;
+  --header-bg: #ffffff;
+  --header-button-text: #475569;
+  --header-button-text-hover: #0f172a;
+  --header-button-text-active: #0f172a;
+  --card-bg: #ffffff;
+  --card-border: #e2e8f0;
+  --card-hover-bg: #fdf8f3;
+  --modal-bg-color: #ffffff;
+  --modal-border-color: #e2e8f0;
+  --modal-box-shadow: 0 12px 40px rgba(15, 23, 42, 0.14);
+  --dropdownlist-bg: #ffffff;
+  --dropdownlist-border: #e2e8f0;
+  --dropdownlist-shadow: 0 16px 32px rgba(15, 23, 42, 0.14);
+  --dropdownitem-bg: #ffffff;
+  --dropdownitem-hover-bg: #fdf8f3;
+  --widgets-bg-color: #ffffff;
+  --widgets-label-bg-color: #eef2f7;
+  --widgets-border-color: #e2e8f0;
+  --widgets-active-label-bg-color: var(--accent);
+  --widgets-active-border-color: var(--accent);
+  --toggle-true-bg-color: var(--accent);
+  --toggle-false-bg-color: #cbd5e1;
+  --toggle-handle-color: #ffffff;
+  --topbar-bg-color: #f1f5f9;
+  --code-block-bg-color: #f6f8fa;
+  --code-line-number-color: #94a3b8;
+  --short-code-bg-color: rgba(15, 23, 42, 0.07);
+  --scrollbar-thumb-color: #cbd5e1;
+  --scrollbar-thumb-hover-color: #94a3b8;
+  --checkerboard-bg-color: #f1f5f9;
+  --checkerboard-dark-color: #e2e8f0;
+  --danger-text-color: #e5484d;
+  --success-text-color: #2f9e44;
+  --card-active-border: var(--accent);
+  --widgets-error-label-bg-color: #e5484d;
+  --widgets-error-border-color: #e5484d;
+  --header-dropdownitem-hover-bg: var(--accent);
+  --header-dropdownitem-hover-text: #ffffff;
+  --btn-green-default-text: #ffffff;
+  --btn-green-default-bg: var(--accent);
+  --btn-green-default-border: var(--accent-hover);
+  --btn-green-hover-bg: var(--accent-hover);
+  --btn-green-hover-border: var(--accent-hover);
+  --btn-green-active-bg: var(--accent-text);
+  --btn-green-disabled-text: rgba(255, 255, 255, 0.65);
+  --btn-green-disabled-bg: rgba(217, 131, 39, 0.45);
+  --btn-green-disabled-border: transparent;
+}
+
+/* --------------------------------------------------------------------------
+   2. Token brand (dark) — nyaris identik dengan palet dark mytheme
+   -------------------------------------------------------------------------- */
+html[data-theme="dark"] {
+  color-scheme: dark;
+
+  --body-bg-color: #0d1117;
+  --primary-text-color: #f8fafc;
+  --secondary-text-color: #cbd5e1;
+  --disabled-text-color: #78889e;
+  --url-text-color: #f19b3e;
+  --input-bg-color: #0d1117;
+  --input-border-color: #273142;
+  --input-placeholder-color: #78889e;
+  --header-bg: #161b26;
+  --header-button-text: #cbd5e1;
+  --header-button-text-hover: #f8fafc;
+  --header-button-text-active: #ffffff;
+  --card-bg: #161b26;
+  --card-border: #273142;
+  --card-hover-bg: #1f2636;
+  --modal-bg-color: #161b26;
+  --modal-border-color: #273142;
+  --modal-box-shadow: 0 12px 40px rgba(0, 0, 0, 0.5);
+  --dropdownlist-bg: #1f2636;
+  --dropdownlist-border: #273142;
+  --dropdownlist-shadow: 0 16px 32px rgba(0, 0, 0, 0.6);
+  --dropdownitem-bg: #1f2636;
+  --dropdownitem-hover-bg: #161b26;
+  --widgets-bg-color: #12161f;
+  --widgets-label-bg-color: #1f2636;
+  --widgets-border-color: #273142;
+  --widgets-active-label-bg-color: var(--accent);
+  --widgets-active-border-color: var(--accent);
+  --toggle-true-bg-color: var(--accent);
+  --toggle-false-bg-color: #475569;
+  --toggle-handle-color: #f8fafc;
+  --topbar-bg-color: #1f2636;
+  --code-block-bg-color: #161b26;
+  --code-line-number-color: #78889e;
+  --short-code-bg-color: rgba(240, 246, 252, 0.15);
+  --scrollbar-thumb-color: #3b4657;
+  --scrollbar-thumb-hover-color: #273142;
+  --checkerboard-bg-color: #1f2636;
+  --checkerboard-dark-color: #161b26;
+  --card-active-border: var(--accent);
+  --widgets-error-label-bg-color: #e5484d;
+  --widgets-error-border-color: #e5484d;
+  --header-dropdownitem-hover-bg: var(--accent);
+  --header-dropdownitem-hover-text: #ffffff;
+  --btn-green-default-text: #ffffff;
+  --btn-green-default-bg: var(--accent);
+  --btn-green-default-border: var(--accent-hover);
+  --btn-green-hover-bg: var(--accent-hover);
+  --btn-green-hover-border: var(--accent-hover);
+  --btn-green-active-bg: var(--accent-text);
+  --btn-green-disabled-text: rgba(255, 255, 255, 0.65);
+  --btn-green-disabled-bg: rgba(217, 131, 39, 0.45);
+  --btn-green-disabled-border: transparent;
+
+  --btn-gray-default-bg: #1f2636;
+  --btn-gray-default-border: #273142;
+  --btn-gray-hover-bg: #273142;
+  --btn-gray-hover-border: #475569;
+  --btn-gray-focus-bg: #1f2636;
+  --btn-gray-disabled-text: #78889e;
+  --btn-gray-disabled-bg: #161b26;
+  --btn-gray-disabled-border: #273142;
+  --btn-red-default-text: #f85149;
+  --btn-red-default-bg: #1f2636;
+  --btn-red-default-border: #273142;
+  --btn-red-hover-text: #ffffff;
+  --btn-red-hover-bg: #da3633;
+  --btn-red-hover-border: #f85149;
+  --btn-red-active-bg: #b62324;
+  --btn-red-active-border: rgba(240, 246, 252, 0.1);
+  --btn-red-disabled-text: rgba(248, 81, 73, 0.5);
+  --btn-red-disabled-bg: #0d1117;
+  --rdtPicker-bg-color: #1f2636;
+  --rdtPicker-border-color: #273142;
+  --rdtPicker-shadow: 0 16px 32px rgba(0, 0, 0, 0.6);
+  --rdtPicker-hover-bg-color: #161b26;
+  --rdtPicker-active-bg-color: var(--accent);
+  --color-picker-bg-color: #1f2636;
+  --color-picker-border-color: #273142;
+  --color-picker-shadow: 0 16px 32px rgba(0, 0, 0, 0.6);
+}
+
+/* --------------------------------------------------------------------------
+   3. Aturan tema gelap (diadaptasi dari dark.css, di-scope ke [data-theme="dark"])
+   -------------------------------------------------------------------------- */
+
+.css-15mesr9-IconWrapper-NetlifyCreditIcon,
+.css-1o92x15-IconWrapper-PageLogoIcon {
+  display: none !important;
+}
+
+
+[data-slate-editor] {
+  -webkit-user-modify: read-write !important;
+}
+
+@media (min-width: 1120px) {
+  .css-1f3mf5k-StyledModal {
+    width: calc(940px);
+  }
+}
+
+html[data-theme="dark"] {
+    color: var(--primary-text-color);
+    background-color: var(--body-bg-color);
+  }
+
+html[data-theme="dark"] body {
+    background-color: var(--body-bg-color);
+    color: var(--primary-text-color);
+    overscroll-behavior: none;
+  }
+
+html[data-theme="dark"] a {
+    font-size: inherit;
+    color: var(--url-text-color);
+  }
+
+html[data-theme="dark"] h1, html[data-theme="dark"] h2, html[data-theme="dark"] h3, html[data-theme="dark"] h4, html[data-theme="dark"] h5, html[data-theme="dark"] h6, html[data-theme="dark"] p {
+    color: inherit;
+  }
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb {
+    background-color: var(--scrollbar-thumb-color) !important;
+    border: unset !important;
+    border-radius: 4px;
+  }
+
+html[data-theme="dark"] ::-webkit-scrollbar-thumb:hover {
+    background-color: var(--scrollbar-thumb-hover-color) !important;
+  }
+
+html[data-theme="dark"] ::-webkit-scrollbar-track {
+    background: var(--body-bg-color) !important;
+  }
+
+html[data-theme="dark"] iframe#netlify-identity-widget {
+    z-index: 400 !important;
+  }
+
+/* button */
+  /* gray button */
+  html[data-theme="dark"] [class*="button-default-gray"], html[data-theme="dark"] [class*="button-medium-gray "], html[data-theme="dark"] [class*="button-default-disabled"], html[data-theme="dark"] [class*="button-default-lightBlue"], html[data-theme="dark"] [class*="AddButton-button"], html[data-theme="dark"] [class*="FileWidgetButton-button"], html[data-theme="dark"] [class*="SaveButton-lightBlue"], html[data-theme="dark"] [class*="StatusButton"], html[data-theme="dark"] [class*="StyledDropdownButton"]:not([class*="grayText"]):not([class*="Publish"]) {
+    color: var(--primary-text-color);
+    background-color: var(--btn-gray-default-bg);
+    border: 1px solid;
+    border-color: var(--btn-gray-default-border);
+    border-radius: 6px;
+    transition: .2s cubic-bezier(.3, 0, .5, 1);
+    transition-property: color, background-color, border-color;
+  }
+
+html[data-theme="dark"] [class*="button-default-gray"]:hover, html[data-theme="dark"] [class*="button-medium-gray "]:hover, html[data-theme="dark"] [class*="button-default-disabled"]:hover, html[data-theme="dark"] [class*="button-default-lightBlue"]:hover, html[data-theme="dark"] [class*="AddButton-button"]:hover, html[data-theme="dark"] [class*="FileWidgetButton-button"]:hover, html[data-theme="dark"] [class*="SaveButton-lightBlue"]:hover, html[data-theme="dark"] [class*="StatusButton"]:hover, html[data-theme="dark"] [class*="StyledDropdownButton"]:not([class*="grayText"]):not([class*="Publish"]):hover {
+    background-color: var(--btn-gray-hover-bg);
+    border-color: var(--btn-gray-hover-border);
+    transition-duration: .1s;
+  }
+
+html[data-theme="dark"] [class*="button-default-gray"]:focus, html[data-theme="dark"] [class*="button-medium-gray "]:focus, html[data-theme="dark"] [class*="button-default-disabled"]:focus, html[data-theme="dark"] [class*="button-default-lightBlue"]:focus, html[data-theme="dark"] [class*="AddButton-button"]:focus, html[data-theme="dark"] [class*="FileWidgetButton-button"]:focus, html[data-theme="dark"] [class*="SaveButton-lightBlue"]:focus, html[data-theme="dark"] [class*="StatusButton"]:focus, html[data-theme="dark"] [class*="StyledDropdownButton"]:not([class*="grayText"]):not([class*="Publish"]):focus {
+    color: var(--primary-text-color);
+    background-color: var(--btn-gray-focus-bg);
+  }
+
+html[data-theme="dark"] [class*="button-default-disabled"][disabled] {
+    color: var(--btn-gray-disabled-text);
+    background-color: var(--btn-gray-disabled-bg);
+    border: 1px solid;
+    border-color: var(--btn-gray-disabled-border);
+    border-radius: 6px;
+  }
+
+/* red button */
+  html[data-theme="dark"] [class*="utton-lightRed"], html[data-theme="dark"] [class*="FileWidgetButtonRemove-button"], html[data-theme="dark"] [class*="DeleteButton"] {
+    color: var(--btn-red-default-text);
+    background-color: var(--btn-red-default-bg);
+    border: 1px solid;
+    border-color: var(--btn-red-default-border);
+    border-radius: 6px;
+    transition: .2s cubic-bezier(.3, 0, .5, 1);
+    transition-property: color, background-color, border-color;
+  }
+
+html[data-theme="dark"] [class*="utton-lightRed"]:hover, html[data-theme="dark"] [class*="FileWidgetButtonRemove-button"]:hover, html[data-theme="dark"] [class*="DeleteButton"]:hover {
+    color: var(--btn-red-hover-text);
+    background-color: var(--btn-red-hover-bg);
+    border-color: var(--btn-red-hover-border);
+    transition-duration: .1s;
+  }
+
+html[data-theme="dark"] [class*="utton-lightRed"]:focus, html[data-theme="dark"] [class*="FileWidgetButtonRemove-button"]:focus, html[data-theme="dark"] [class*="DeleteButton"]:focus {
+    border-color: var(--btn-red-hover-border);
+  }
+
+html[data-theme="dark"] [class*="utton-lightRed"]:active, html[data-theme="dark"] [class*="FileWidgetButtonRemove-button"]:active, html[data-theme="dark"] [class*="DeleteButton"]:active {
+    color: var(--btn-red-hover-text);
+    background-color: var(--btn-red-active-bg);
+    border-color: var(--btn-red-active-border);
+  }
+
+html[data-theme="dark"] [class*="utton-lightRed"][disabled] {
+    color: var(--btn-red-disabled-text);
+    background-color: var(--btn-red-disabled-bg);
+    border: 1px solid;
+    border-color: var(--btn-red-default-border);
+    border-radius: 6px;
+  }
+
+/* green button */
+  html[data-theme="dark"] [class*="button-green"], html[data-theme="dark"] [class*="PublishButton"], html[data-theme="dark"] [class*="publishedButton"] {
+    color: var(--btn-green-default-text);
+    background-color: var(--btn-green-default-bg);
+    border: 1px solid;
+    border-color: var(--btn-green-default-border);
+    border-radius: 6px;
+    transition: .2s cubic-bezier(.3, 0, .5, 1);
+    transition-property: color, background-color, border-color;
+  }
+
+html[data-theme="dark"] [class*="button-green"]:hover, html[data-theme="dark"] [class*="PublishButton"]:hover, html[data-theme="dark"] [class*="publishedButton"]:hover {
+    background-color: var(--btn-green-hover-bg);
+    border-color: var(--btn-green-hover-border);
+    transition-duration: .1s;
+  }
+
+html[data-theme="dark"] [class*="button-green"]:active, html[data-theme="dark"] [class*="PublishButton"]:active, html[data-theme="dark"] [class*="publishedButton"]:active {
+    background-color: var(--btn-green-active-bg);
+  }
+
+html[data-theme="dark"] [class*="button-green"]:focus, html[data-theme="dark"] [class*="PublishButton"]:focus, html[data-theme="dark"] [class*="publishedButton"]:focus {
+    background-color: var(--btn-green-active-bg);
+    border-color: var(--btn-green-hover-border);
+  }
+
+html[data-theme="dark"] [class*="button-green"][disabled], html[data-theme="dark"] [class*="PublishButton"][disabled] {
+    color: var(--btn-green-disabled-text);
+    background-color: var(--btn-green-disabled-bg);
+    border: 1px solid;
+    border-color: var(--btn-green-disabled-border);
+    border-radius: 6px;
+  }
+
+/* notification */
+  html[data-theme="dark"] [class*="toast-success"] {
+    color: var(--success-text-color);
+    background-color: var(--dropdownitem-bg);
+    box-shadow: var(--dropdownlist-shadow);
+    border-radius: 6px;
+  }
+
+html[data-theme="dark"] [class*="toast-danger"] {
+    color: var(--danger-text-color);
+    background-color: var(--dropdownitem-bg);
+    box-shadow: var(--dropdownlist-shadow);
+    border-radius: 6px;
+  }
+
+/* dropdown */
+  html[data-theme="dark"] ul[class*="dropdownList"], html[data-theme="dark"] ul[class*="Suggestions"], html[data-theme="dark"] [class*="ControlContainer"] [class*="menu"] {
+    background-color: var(--dropdownlist-bg);
+    border: 1px solid var(--dropdownlist-border);
+    border-radius: 6px;
+    box-shadow: var(--dropdownlist-shadow);
+  }
+
+html[data-theme="dark"] ul[class*="dropdownList"]>[class*="dropdownItem"], html[data-theme="dark"] ul[class*="Suggestions"]>li[class*="SuggestionItem"], html[data-theme="dark"] [class*="ControlContainer"] [class*="menu"] [class*="option"] {
+    color: var(--primary-text-color);
+    background-color: var(--dropdownitem-bg);
+    border-width: 0;
+  }
+
+html[data-theme="dark"] ul[class*="dropdownList"]>[class*="dropdownItem"]:hover, html[data-theme="dark"] ul[class*="Suggestions"]>li[class*="SuggestionItem"]:hover, html[data-theme="dark"] [class*="ControlContainer"] [class*="menu"] [class*="option"]:hover {
+    color: inherit;
+    background-color: var(--dropdownitem-hover-bg);
+  }
+
+html[data-theme="dark"] li[class*="SuggestionItem"] {
+    display: flex;
+    justify-content: space-between;
+    padding: 6px 20px 6px 32px;
+  }
+
+html[data-theme="dark"] li.css-fmy46h-SuggestionItem::after {
+    content: "✓";
+    position: relative;
+    right: 0px;
+  }
+
+html[data-theme="dark"] [role="menuitem"].css-zcym63-button-dropdownItem-StyledMenuItem>span {
+    display: contents;
+  }
+
+html[data-theme="dark"] [role="menuitem"].css-zcym63-button-dropdownItem-StyledMenuItem>span:only-child::after {
+    content: "✓";
+    position: relative;
+    right: 0px;
+  }
+
+html[data-theme="dark"] div.css-8fe0f3-option::after {
+    content: "✓";
+    position: absolute;
+    right: 22px;
+  }
+
+html[data-theme="dark"] [role="menuitem"]>input[type="checkbox"] {
+    display: none;
+  }
+
+html[data-theme="dark"] [role="menuitem"]>input[type="checkbox"]+span::before {
+    content: "✓";
+    color: transparent;
+    display: inline-block;
+    padding-right: 6px;
+  }
+
+html[data-theme="dark"] [role="menuitem"]>input[type="checkbox"]:checked+span::before {
+    color: inherit;
+  }
+
+html[data-theme="dark"] li[class*="SuggestionHeader"] {
+    color: inherit;
+  }
+
+html[data-theme="dark"] [class*="MenuItemIconContainer"]>[class*="IconWrapper"] {
+    color: inherit;
+  }
+
+html[data-theme="dark"] ul[class*="dropdownList"]::-webkit-scrollbar-track, html[data-theme="dark"] ul[class*="Suggestions"]::-webkit-scrollbar-track, html[data-theme="dark"] [class*="ControlContainer"] [class*="menu"]>div::-webkit-scrollbar-track {
+    background: var(--dropdownlist-bg) !important;
+  }
+
+/*header*/
+  html[data-theme="dark"] header[class*="AppHeader"] {
+    background-color: var(--header-bg);
+  }
+
+html[data-theme="dark"] header [class*="AppHeaderButton"] {
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] header [class*="AppHeaderButton"]:hover, html[data-theme="dark"] header [class*="AppHeaderButton"]:focus {
+    color: var(--header-button-text-hover);
+  }
+
+html[data-theme="dark"] header [class*="AppHeaderButton"].header-link-active {
+    color: var(--header-button-text-active);
+  }
+
+html[data-theme="dark"] header [class*="AppHeaderNavList"] [class*="IconWrapper"] {
+    color: inherit !important;
+  }
+
+html[data-theme="dark"] header ul[class*="dropdownList"]>[class*="dropdownItem"]:hover, html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] ul[class*="dropdownList"]>[class*="dropdownItem"]:hover {
+    color: var(--header-dropdownitem-hover-text);
+    background-color: var(--header-dropdownitem-hover-bg);
+    z-index: 320;
+  }
+
+html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] {
+    background-color: var(--header-bg);
+  }
+
+html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] [class*="ToolbarSectionBackLink"] {
+    border-color: var(--btn-gray-default-border);
+  }
+
+html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] [class*="ToolbarSectionBackLink"]:hover, html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] [class*="ToolbarSectionBackLink"]:focus {
+    background-color: var(--btn-gray-default-bg);
+  }
+
+html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] [class*="ToolbarSectionBackLink"] [class*="BackArrow"], html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] [class*="ToolbarSectionBackLink"] [class*="BackCollection"] {
+    color: var(--primary-text-color);
+  }
+
+html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] [class*="ToolbarSectionBackLink"] [class*="textBadgeSuccess"] {
+    color: var(--success-text-color);
+  }
+
+html[data-theme="dark"] [class*="EditorContainer"]>[class*="ToolbarContainer"] [class*="ToolbarSectionMeta"] {
+    border-color: var(--btn-gray-default-border);
+  }
+
+/* card */
+  html[data-theme="dark"] [class*="CollectionContainer"] [class*="Container-card"], html[data-theme="dark"] [class*="CollectionContainer"] [class*="ListCard-card"], html[data-theme="dark"] [class*="CollectionContainer"] [class*="GridCard-card"], html[data-theme="dark"] [class*="WorkflowContainer"] [class*="WorkflowTop-card-cardTop"], html[data-theme="dark"] [class*="WorkflowContainer"] [class*="WorkflowCardContainer-card"], html[data-theme="dark"] [class*="WorkflowContainer"] [class*="ColumnHeader"] {
+    background-color: var(--card-bg);
+    border: 1px solid var(--card-border);
+    box-shadow: none;
+    border-radius: 6px;
+  }
+
+html[data-theme="dark"] [class*="CollectionContainer"] [class*="GridCardLink"] {
+    color: var(--primary-text-color);
+    background-color: unset;
+  }
+
+html[data-theme="dark"] [class*="CollectionContainer"] [class*="ListCardLink"] {
+    color: var(--primary-text-color);
+  }
+
+html[data-theme="dark"] [class*="CollectionContainer"] [class*="GridCardLink"] [class*="CardBody"]::after {
+    content: unset;
+  }
+
+html[data-theme="dark"] [class*="CollectionContainer"] [class*="ListCardLink"]:hover, html[data-theme="dark"] [class*="CollectionContainer"] [class*="GridCardLink"]:hover, html[data-theme="dark"] [class*="WorkflowContainer"] [class*="WorkflowCardContainer-card"]:hover {
+    color: inherit;
+    background-color: var(--card-hover-bg);
+  }
+
+html[data-theme="dark"] [class*="CardButtonContainer"] {
+    background-color: inherit;
+  }
+
+html[data-theme="dark"] a[class*="AppHeaderTestRepoIndicator"], html[data-theme="dark"] a[class*="AppHeaderSiteLink"] {
+    color: var(--secondary-text-color);
+  }
+
+html[data-theme="dark"] a[class*="RefreshPreviewButton"], html[data-theme="dark"] a[class*="RefreshPreviewButton"]>[class*="IconWrapper"] {
+    color: var(--url-text-color);
+  }
+
+/* auth page */
+  html[data-theme="dark"] section[class*="StyledAuthenticationPage"] a[class*="GoBackButtonStyle"] {
+    color: var(--secondary-text-color);
+  }
+
+html[data-theme="dark"] section[class*="StyledAuthenticationPage"] a[class*="GoBackButtonStyle"]>p[class*="ButtonText"] {
+    color: inherit;
+  }
+
+html[data-theme="dark"] section[class*="StyledAuthenticationPage"] span[class*="PageLogoIcon"], html[data-theme="dark"] section[class*="StyledAuthenticationPage"] a[class*="GoBackButtonStyle"]:hover {
+    color: var(--primary-text-color);
+  }
+
+/* contents */
+  /*sidebar*/
+  html[data-theme="dark"] [class*="SidebarHeading"] {
+    color: inherit;
+  }
+
+html[data-theme="dark"] [class*="SidebarNavLink"], html[data-theme="dark"] [class*="TreeNavLink"] {
+    border-left: none;
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] [class*="SidebarNavLink"]:hover, html[data-theme="dark"] [class*="TreeNavLink"]:hover {
+    color: var(--header-button-text);
+    background-color: var(--dropdownitem-hover-bg);
+  }
+
+html[data-theme="dark"] [class*="SidebarNavLink"].sidebar-active, html[data-theme="dark"] [class*="TreeNavLink"].sidebar-active {
+    color: var(--header-button-text-active);
+    background-color: var(--header-dropdownitem-hover-bg);
+  }
+
+html[data-theme="dark"] [class*="SearchContainer"] input[class*="SearchInput"] {
+    background-color: var(--input-bg-color);
+    border: 1px solid var(--input-border-color);
+    color: inherit;
+  }
+
+html[data-theme="dark"] [class*="SearchContainer"] [class*="IconWrapper"] {
+    color: var(--input-placeholder-color);
+  }
+
+html[data-theme="dark"] [class*="SearchContainer"] input[class*="SearchInput"]::placeholder {
+    color: var(--input-placeholder-color);
+  }
+
+/*collection*/
+  html[data-theme="dark"] [class*="CollectionControlsContainer"] .css-14aa6nw-StyledDropdownButton-button-default-caret-caretDown-Button-button-medium-grayText-ControlButton {
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] [class*="CollectionControlsContainer"] .css-14aa6nw-StyledDropdownButton-button-default-caret-caretDown-Button-button-medium-grayText-ControlButton:hover {
+    color: var(--header-button-text-hover);
+  }
+
+html[data-theme="dark"] [class*="CollectionControlsContainer"] .css-58ai8s-StyledDropdownButton-button-default-caret-caretDown-Button-button-medium-grayText-ControlButton {
+    color: var(--header-button-text-active);
+  }
+
+html[data-theme="dark"] [class*="CollectionControlsContainer"] .css-1jfbwn6-ViewControlsButton-button {
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] [class*="CollectionControlsContainer"] .css-1jfbwn6-ViewControlsButton-button:hover {
+    color: var(--header-button-text-hover);
+  }
+
+html[data-theme="dark"] [class*="CollectionControlsContainer"] .css-1fh4556-ViewControlsButton-button {
+    color: var(--header-button-text-active);
+  }
+
+html[data-theme="dark"] [class*="GroupHeading"] [class*="cardTopDescription"] {
+    color: var(--secondary-text-color);
+  }
+
+/* workflow */
+  html[data-theme="dark"] [class*="WorkflowContainer"] [class*="ColumnHeader"] {
+    color: var(--primary-text-color);
+  }
+
+html[data-theme="dark"] .css-1njtcvy-column-WorkflowList::before, html[data-theme="dark"] .css-1njtcvy-column-WorkflowList::after, html[data-theme="dark"] .css-lhns9r-column-columnHovered-WorkflowList::before, html[data-theme="dark"] .css-lhns9r-column-columnHovered-WorkflowList::after {
+    background-color: var(--card-border);
+    height: 100%;
+    top: 0px;
+  }
+
+html[data-theme="dark"] [class*="WorkflowLink"] [class*="CardCollection"], html[data-theme="dark"] [class*="WorkflowLink"] [class*="CardTitle"] {
+    color: var(--primary-text-color);
+  }
+
+html[data-theme="dark"] [class*="WorkflowLink"] [class*="CardDate"], html[data-theme="dark"] [class*="WorkflowLink"] [class*="CardBody"], html[data-theme="dark"] p[class*="WorkflowTopDescription"] {
+    color: var(--secondary-text-color);
+  }
+
+/* media */
+  html[data-theme="dark"] [class*="StyledModal"] {
+    background-color: var(--modal-bg-color);
+    box-shadow: var(--modal-box-shadow);
+    border: 1px solid var(--modal-border-color);
+    border-radius: 6px;
+  }
+
+html[data-theme="dark"] [class*="StyledModal"] [class*="CloseButton"] {
+    color: var(--primary-text-color);
+    background-color: var(--btn-gray-default-bg);
+    border: 1px solid;
+    border-color: var(--btn-gray-default-border);
+  }
+
+html[data-theme="dark"] [class*="StyledModal"] .css-1er4xqr-Card {
+    border: 2px solid var(--card-border);
+  }
+
+html[data-theme="dark"] [class*="StyledModal"] .css-1v1y2wn-Card {
+    border: 2px solid var(--card-active-border);
+  }
+
+html[data-theme="dark"] [class*="StyledModal"] [class*="checkerboard"] {
+    background-color: var(--checkerboard-bg-color);
+    border-bottom: 2px solid var(--modal-border-color);
+    background-image: linear-gradient(45deg, var(--checkerboard-dark-color) 25%, transparent 25%, transparent 75%, var(--checkerboard-dark-color) 75%, var(--checkerboard-dark-color)),
+      linear-gradient(45deg, var(--checkerboard-dark-color) 25%, transparent 25%, transparent 75%, var(--checkerboard-dark-color) 75%, var(--checkerboard-dark-color));
+  }
+
+html[data-theme="dark"] [class*="StyledModal"] [class*="DraftText"] {
+    color: inherit;
+    background-color: var(--modal-border-color);
+    padding: 5px 8px;
+  }
+
+html[data-theme="dark"] [class*="StyledModal"] [class*="CardText"] {
+    color: inherit;
+  }
+
+/*editor*/
+  html[data-theme="dark"] [class*="EditorContainer"] [class*="card-splitPane"] {
+    background-color: var(--body-bg-color);
+  }
+
+html[data-theme="dark"] #preview-pane {
+    background-color: var(--body-bg-color);
+    border-radius: 0;
+  }
+
+html[data-theme="dark"] .Resizer.vertical {
+    width: 5px;
+    border-right: 1px solid var(--modal-border-color);
+  }
+
+html[data-theme="dark"] .Resizer.vertical::before {
+    content: none;
+  }
+
+html[data-theme="dark"] button.css-1glyzdz-ButtonRound-button-EditorToggle {
+    color: var(--toggle-true-bg-color);
+    background-color: var(--btn-gray-default-bg);
+    border: 1px solid;
+    border-color: var(--btn-gray-default-border);
+    transition: .2s cubic-bezier(.3, 0, .5, 1);
+    transition-property: color, background-color, border-color;
+  }
+
+html[data-theme="dark"] button.css-1f8dk1z-ButtonRound-button-EditorToggle {
+    color: var(--toggle-false-bg-color);
+    background-color: var(--btn-gray-default-bg);
+    border: 1px solid;
+    border-color: var(--btn-gray-default-border);
+    transition: .2s cubic-bezier(.3, 0, .5, 1);
+    transition-property: color, background-color, border-color;
+  }
+
+html[data-theme="dark"] button.css-1glyzdz-ButtonRound-button-EditorToggle:hover {
+    color: var(--header-button-text-active);
+    background-color: var(--btn-gray-hover-bg);
+    border-color: var(--btn-gray-hover-border);
+    transition-duration: .1s;
+  }
+
+html[data-theme="dark"] button.css-1f8dk1z-ButtonRound-button-EditorToggle:hover {
+    color: var(--secondary-text-color);
+    background-color: var(--btn-gray-hover-bg);
+    border-color: var(--btn-gray-hover-border);
+    transition-duration: .1s;
+  }
+
+/*widgets*/
+  html[data-theme="dark"] [class*="FieldLabel"]::after {
+    background-color: var(--body-bg-color) !important;
+  }
+
+html[data-theme="dark"] [class*="FieldLabel"] {
+    color: var(--primary-text-color) !important;
+    background-color: var(--widgets-label-bg-color) !important;
+    padding: 3px 8px 2px !important;
+  }
+
+html[data-theme="dark"] .css-ys2s0e-DateTimeControl, html[data-theme="dark"] .css-lshhuz, html[data-theme="dark"] .css-83wr9v, html[data-theme="dark"] .css-2ek3w9, html[data-theme="dark"] .css-wesa1q-TextControl, html[data-theme="dark"] .css-1cry9ba-TextControl, html[data-theme="dark"] .css-1hs8sc6-TextControl, html[data-theme="dark"] .css-182avcw, html[data-theme="dark"] .css-18h6btn, html[data-theme="dark"] .css-12fzmby, html[data-theme="dark"] .css-13dyp8r, html[data-theme="dark"] .css-xa00c7, html[data-theme="dark"] .css-1d0dxug {
+    color: inherit;
+    background-color: var(--widgets-bg-color);
+    border: 1px solid var(--widgets-border-color);
+    border-radius: 0 6px 6px;
+  }
+
+html[data-theme="dark"] [class*="1vur7zs-FieldLabel"] {
+    color: var(--header-button-text-active);
+    background-color: var(--widgets-active-label-bg-color);
+    padding: 3px 8px 2px;
+  }
+
+html[data-theme="dark"] .css-188efjc, html[data-theme="dark"] .css-3yr7zq-TextControl, html[data-theme="dark"] .css-12fzmby {
+    color: inherit;
+    background-color: var(--widgets-bg-color);
+    border: 1px solid var(--widgets-active-border-color);
+    border-radius: 0 6px 6px;
+  }
+
+html[data-theme="dark"] .css-1noq96f-FieldLabel-fieldLabel {
+    background-color: var(--widgets-error-label-bg-color);
+    padding: 3px 8px 2px;
+  }
+
+html[data-theme="dark"] .css-9guxbf-ControlErrorsList {
+    color: var(--danger-text-color);
+  }
+
+html[data-theme="dark"] .css-1caau9x, html[data-theme="dark"] .css-xo8dlj, html[data-theme="dark"] .css-14hxnzs-TextControl, html[data-theme="dark"] .css-1eeq9l0-TextControl, html[data-theme="dark"] .css-ntdq13 {
+    color: inherit;
+    background-color: var(--widgets-bg-color);
+    border: 1px solid var(--widgets-error-border-color);
+    border-radius: 0 6px 6px;
+  }
+
+/*dropdown*/
+  html[data-theme="dark"] [class*="ControlContainer"] div[class$="-control"] {
+    background-color: transparent;
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] div[class$="-control"] [class*="indicatorContainer"] {
+    color: var(--input-placeholder-color);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] div[class$="-control"] [class*="indicatorContainer"]:hover {
+    color: var(--header-button-text-hover);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] div[class$="-control"] [class*="-loadingIndicator"]>span {
+    background-color: var(--input-placeholder-color);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] div[class$="-control"] [class*="css-1g6gooi"], html[data-theme="dark"] [class*="ControlContainer"] div[class$="-control"] [class*="-singleValue"] {
+    color: inherit;
+  }
+
+/*date*/
+  html[data-theme="dark"] .rdt .rdtPicker {
+    background-color: var(--rdtPicker-bg-color);
+    box-shadow: var(--rdtPicker-shadow);
+    border: 1px solid var(--rdtPicker-border-color);
+    border-radius: 6px;
+  }
+
+html[data-theme="dark"] .rdt .rdtPicker thead tr:first-child th:hover, html[data-theme="dark"] .rdt .rdtPicker td.rdtDay:hover, html[data-theme="dark"] .rdt .rdtPicker td.rdtHour:hover, html[data-theme="dark"] .rdt .rdtPicker td.rdtMinute:hover, html[data-theme="dark"] .rdt .rdtPicker td.rdtSecond:hover, html[data-theme="dark"] .rdt .rdtPicker .rdtTimeToggle:hover, html[data-theme="dark"] .rdt .rdtPicker .rdtCounter .rdtBtn:hover, html[data-theme="dark"] .rdt .rdtPicker td.rdtMonth:hover, html[data-theme="dark"] .rdt .rdtPicker td.rdtYear:hover {
+    background-color: var(--rdtPicker-hover-bg-color);
+  }
+
+html[data-theme="dark"] .rdt .rdtPicker td.rdtActive, html[data-theme="dark"] .rdt .rdtPicker td.rdtActive:hover {
+    background-color: var(--rdtPicker-active-bg-color);
+  }
+
+html[data-theme="dark"] .rdt .rdtPicker td.rdtOld, html[data-theme="dark"] .rdt .rdtPicker td.rdtNew {
+    color: var(--disabled-text-color);
+  }
+
+html[data-theme="dark"] .rdt .rdtPicker td.rdtToday::before {
+    border-bottom: 7px solid var(--rdtPicker-active-bg-color);
+  }
+
+html[data-theme="dark"] .rdt .rdtPicker th {
+    border-bottom: 1px solid var(--rdtPicker-border-color);
+  }
+
+/*image uplaod*/
+  html[data-theme="dark"] [class*="ImageWrapper-checkerboard"] {
+    border: 2px solid var(--widgets-border-color);
+    background-color: var(--checkerboard-bg-color);
+    background-image: linear-gradient(45deg, var(--checkerboard-dark-color) 25%, transparent 25%, transparent 75%, var(--checkerboard-dark-color) 75%, var(--checkerboard-dark-color)),
+      linear-gradient(45deg, var(--checkerboard-dark-color) 25%, transparent 25%, transparent 75%, var(--checkerboard-dark-color) 75%, var(--checkerboard-dark-color));
+  }
+
+/*color picker*/
+  html[data-theme="dark"] [class*="ColorSwatch"] {
+    border-color: var(--btn-gray-default-border);
+  }
+
+html[data-theme="dark"] .css-177o7zx-ColorSwatch {
+    color: var(--primary-text-color);
+    background-color: var(--btn-gray-default-bg);
+  }
+
+html[data-theme="dark"] .chrome-picker {
+    background: var(--color-picker-bg-color) !important;
+    overflow: hidden;
+    border: 1px solid var(--color-picker-border-color);
+    border-radius: 6px !important;
+    box-shadow: var(--color-picker-shadow) !important;
+  }
+
+html[data-theme="dark"] [id^="rc-editable-input-"] {
+    box-shadow: none !important;
+    background-color: var(--color-picker-bg-color);
+    border: 1px solid var(--color-picker-border-color) !important;
+    border-radius: 4px !important;
+    color: inherit !important;
+  }
+
+html[data-theme="dark"] div.chrome-picker>div>.flexbox-fix:nth-child(1)>div:nth-child(1)>div>div:nth-child(1) {
+    box-shadow: none !important;
+    border: 1px solid var(--color-picker-border-color);
+  }
+
+html[data-theme="dark"] div.chrome-picker>div>.flexbox-fix:nth-child(1)>div:nth-child(2)>div:nth-child(2)>div>div:nth-child(1)::after {
+    content: "";
+    height: 100%;
+    display: block;
+    background-color: white;
+  }
+
+html[data-theme="dark"] div.chrome-picker>div>.flexbox-fix:nth-child(2)>div:nth-child(2) svg {
+    fill: var(--secondary-text-color) !important;
+  }
+
+html[data-theme="dark"] div.chrome-picker>div>.flexbox-fix:nth-child(2)>div:nth-child(2) svg:hover {
+    fill: var(--primary-text-color) !important;
+    background: var(--btn-gray-default-border) !important;
+  }
+
+/* toggle */
+  html[data-theme="dark"] [class*=ToggleContainer-StyledToggle][aria-checked="true"]>span[class*="ToggleBackground"] {
+    background-color: var(--toggle-true-bg-color);
+  }
+
+html[data-theme="dark"] [class*=ToggleContainer-StyledToggle][aria-checked="false"]>span[class*="ToggleBackground"] {
+    background-color: var(--toggle-false-bg-color);
+  }
+
+html[data-theme="dark"] [class*=ToggleContainer-StyledToggle]>span[class*="ToggleHandle"] {
+    background-color: var(--toggle-handle-color);
+  }
+
+/* object */
+  html[data-theme="dark"] [class*="listControlItem"] {
+    border: 1px solid var(--widgets-border-color);
+    border-radius: 6px;
+  }
+
+html[data-theme="dark"] [class*="TopBarContainer"], html[data-theme="dark"] [class*="StyledListItemTopBar"], html[data-theme="dark"] [class*="NestedObjectLabel"] {
+    background-color: var(--topbar-bg-color);
+    border-top-right-radius: 6px;
+  }
+
+html[data-theme="dark"] .css-1cjg468, html[data-theme="dark"] .css-55unpk {
+    border: 0px;
+    color: inherit;
+    background-color: var(--widgets-bg-color);
+  }
+
+html[data-theme="dark"] [class*="TopBarContainer"] button[class*="ExpandButton"], html[data-theme="dark"] [class*="StyledListItemTopBar"] [class*="TopBarButton"] {
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] [class*="TopBarContainer"] button[class*="ExpandButton"]:hover, html[data-theme="dark"] [class*="StyledListItemTopBar"] [class*="TopBarButton"]:hover {
+    color: var(--header-button-text-hover);
+  }
+
+/* markdown */
+  html[data-theme="dark"] [class*="cms-editor"] {
+    border: 1px solid var(--widgets-border-color);
+    border-radius: 0 6px 6px;
+  }
+
+html[data-theme="dark"] [class*="cms-editor"] [class*="ToolbarContainer"] {
+    background-color: var(--topbar-bg-color);
+    border-top-right-radius: 6px;
+  }
+
+html[data-theme="dark"] .css-12vfcwo, html[data-theme="dark"] .css-isnoua {
+    border-color: transparent;
+    color: inherit;
+    background-color: var(--widgets-bg-color);
+  }
+
+html[data-theme="dark"] .css-189bh5w, html[data-theme="dark"] .css-f8f1e2 {
+    border-color: var(--widgets-error-border-color);
+    color: inherit;
+    background-color: var(--widgets-bg-color);
+  }
+
+html[data-theme="dark"] [class*="cms-editor"] [class*="ToolbarContainer"] button[class*="StyledToolbarButton"], html[data-theme="dark"] [class*="cms-editor"] [class*="ToolbarContainer"] div[class*="ToolbarDropdownWrapper"] {
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] [class*="cms-editor"] [class*="ToolbarContainer"] button[class*="StyledToolbarButton"]:hover, html[data-theme="dark"] [class*="cms-editor"] [class*="ToolbarContainer"] div[class*="ToolbarDropdownWrapper"]:hover {
+    color: var(--header-button-text-hover);
+  }
+
+html[data-theme="dark"] [class*="cms-editor"] [class*="ToolbarContainer"] button[class*="StyledToolbarButton"][disabled], html[data-theme="dark"] [class*="cms-editor"] [class*="ToolbarContainer"] div[class*="ToolbarDropdownWrapper"][disabled] {
+    color: var(--disabled-text-color);
+  }
+
+html[data-theme="dark"] [class*="ToolbarToggleLabel"] {
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] [class*="ToolbarToggleLabel-ToolbarToggleLabel"] {
+    color: var(--header-button-text-active);
+  }
+
+html[data-theme="dark"] [class*="cms-editor"] blockquote {
+    color: var(--secondary-text-color);
+    border-left: 3px solid var(--secondary-text-color);
+  }
+
+html[data-theme="dark"] [class*="cms-editor"] code[class*="StyledCode"] {
+    background-color: var(--short-code-bg-color);
+    border-radius: 6px;
+    padding: 4px 6px;
+  }
+
+/*code*/
+  html[data-theme="dark"] [class*="react-codemirror"] .cm-s-material.CodeMirror, html[data-theme="dark"] [class*="react-codemirror"] .cm-s-material .CodeMirror-gutters {
+    background-color: var(--code-block-bg-color);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] [class*="SettingsPaneContainer"] {
+    color: var(--primary-text-color);
+    background-color: var(--dropdownlist-bg);
+    border-left: 1px solid var(--dropdownlist-border);
+    overflow: hidden;
+  }
+
+html[data-theme="dark"] [class*="react-codemirror"] .cm-s-material .CodeMirror-linenumber {
+    color: var(--code-line-number-color);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] [class*="SettingsPaneContainer"]>label {
+    color: var(--primary-text-color);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] [class*="SettingsPaneContainer"] [class$="-control"] {
+    border: 1px solid var(--dropdownlist-border);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] button[class*="StyledSettingsButton-button"] {
+    background-color: transparent;
+    color: var(--header-button-text);
+  }
+
+html[data-theme="dark"] [class*="ControlContainer"] button[class*="StyledSettingsButton-button"]:hover {
+    color: var(--header-button-text-hover);
+  }
+
+html[data-theme="dark"] .CodeMirror-vscrollbar, html[data-theme="dark"] .CodeMirror-hscrollbar {
+    cursor: default;
+  }
+
+html[data-theme="dark"] .CodeMirror-vscrollbar::-webkit-scrollbar-track, html[data-theme="dark"] .CodeMirror-hscrollbar::-webkit-scrollbar-track {
+    background: var(--code-block-bg-color) !important;
+  }
+
+html[data-theme="dark"] .css-49ihbh, html[data-theme="dark"] .css-1es1p1t, html[data-theme="dark"] .css-5hiu9n, html[data-theme="dark"] .css-t16udx, html[data-theme="dark"] .css-cp4vl3, html[data-theme="dark"] .css-1b0jsy4, html[data-theme="dark"] .css-9x64io, html[data-theme="dark"] .css-1uptr7l {
+    border-color: var(--widgets-border-color) !important;
+    background-color: var(--widgets-bg-color) !important;
+    color: var(--primary-text-color) !important;
+  }
+
+@media (max-width: 799px) {
+  /* Bring Any Dropdown To Center Of Page */
+
+  [class*=DropdownList] {
+    position: fixed !important;
+    min-width: 20% !important;
+    width: 90% !important;
+    margin: auto !important;
+    height: fit-content !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 10px !important;
+    background: var(--dropdownlist-bg) !important;
+    border: 2px solid var(--accent) !important;
+  }
+
+  /* Add Overflow To Modal Window */
+  [class*=StyledModal] {
+    width: 90dvw !important;
+    width: 90% !important;
+  }
+
+
+
+  [class*=LibraryTitle] {
+    display: none !important;
+  }
+
+  [class*=CollectionTopNewButton] {
+    padding: 0px 10px !important;
+    height: auto !important;
+  }
+
+  [class*=LibraryTop] {
+    overflow-x: auto !important;
+    height: fit-content !important;
+    padding-bottom: 10px !important;
+  }
+
+
+  /* Hide Blog Post Title From Navbar */
+  [class*=BackCollection] {
+    display: none !important;
+  }
+
+  /* Add Padding To Control Pane */
+  [class*=ControlPaneContainer] {
+    padding: 0px 10px !important;
+  }
+
+  /* Rest As Per: Searl's Code*/
+
+  [class*=BackCollection],
+  [class*=BackStatus] {
+    font-size: .6rem !important;
+  }
+
+  [class*=AppHeaderContent],
+  [class*=AppMainContainer] {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+    min-width: calc(100vw - 24px) !important;
+    max-width: 100vw !important;
+  }
+
+  [class*=AppHeaderContent] {
+    display: flex !important;
+    justify-content: space-between !important;
+  }
+
+  [class*=AppHeaderQuickNewButton] {
+    width: 100% !important;
+  }
+
+  [class*=AppHeaderButton] {
+    padding-left: 4px !important;
+    padding-right: 4px !important;
+  }
+
+  [class*=EditorContainer],
+  [class*=ToolbarContainer] {
+    min-width: initial !important;
+    overflow-x: auto !important;
+  }
+
+  [class*=ToolbarSubSectionFirst] {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  [class*=PublishedToolbarButton] {
+    padding: 0 8px !important;
+  }
+
+  [class*=PublishedToolbarButton]::after {
+    display: none !important;
+  }
+
+  [class*=ToolbarSubSectionFirst] {
+    flex-direction: row !important;
+  }
+
+  [class*=SearchInput] {
+    margin-top: 5px !important;
+  }
+
+  [class*=ViewControls] {
+    /* position: initial !important; */
+  }
+
+  [class*=PreviewPaneContainer-ControlPaneContainer] {
+    padding: 0 !important;
+  }
+
+  [class*=ControlPaneContainer] {
+    max-width: 100vw !important;
+  }
+
+
+  [class*=EditorControlBar] [class*=ToolbarContainer] {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  [class*=CollectionContainer] {
+    display: flex !important;
+    flex-direction: column !important;
+  }
+
+  [class*=SidebarContainer] {
+    position: initial !important;
+    width: initial !important;
+  }
+
+  [class*=CollectionMain] {
+    padding-left: 0 !important;
+    margin-top: 20px !important;
+  }
+
+}
+
+/* --------------------------------------------------------------------------
+   3. Polesan brand yang berlaku di light & dark (dimuat paling akhir,
+      sehingga menang tie-break cascade melawan style emotion Decap).
+   -------------------------------------------------------------------------- */
+
+/* Tipografi senada blog */
+#nc-root,
+#nc-root button,
+#nc-root input,
+#nc-root select,
+#nc-root textarea {
+  font-family: var(--brand-font-sans);
+}
+
+#nc-root h1,
+#nc-root h2,
+#nc-root h3,
+#nc-root [class*="PageTitle"],
+#nc-root [class*="card-Title"],
+#nc-root [class*="CardTitle"] {
+  font-family: var(--brand-font-heading);
+}
+
+#nc-root [class*="cms-editor-visual"],
+#nc-root [class*="cms-editor-visual"] [data-slate-editor] {
+  font-family: var(--brand-font-sans);
+}
+
+/* Sembunyikan credit pihak ketiga di footer admin */
+[class*="NetlifyCreditIcon"],
+[class*="DecapCreditIcon"],
+[class*="PoweredByDecap"] {
+  display: none !important;
+}
+
+/* Tombol aksi utama -> orange brand (light & dark) */
+[class*="PublishButton"],
+[class*="publishedButton"],
+[class*="SaveButton"],
+[class*="lightBlue"][class*="Button"],
+a[class*="lightBlue"][class*="Button"],
+[class*="CollectionTopNewButton"],
+[class*="AppHeaderQuickNewButton"] {
+  color: #ffffff !important;
+  background-color: var(--accent) !important;
+  border: 1px solid var(--accent-hover) !important;
+  border-radius: 8px !important;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+[class*="PublishButton"]:hover,
+[class*="publishedButton"]:hover,
+[class*="SaveButton"]:hover,
+[class*="lightBlue"][class*="Button"]:hover,
+a[class*="lightBlue"][class*="Button"]:hover,
+[class*="CollectionTopNewButton"]:hover,
+[class*="AppHeaderQuickNewButton"]:hover {
+  color: #ffffff !important;
+  background-color: var(--accent-hover) !important;
+  border-color: var(--accent-hover) !important;
+}
+
+[class*="PublishButton"]:active,
+[class*="SaveButton"]:active,
+[class*="lightBlue"][class*="Button"]:active,
+[class*="AppHeaderQuickNewButton"]:active {
+  background-color: var(--accent-text) !important;
+}
+
+/* Link aktif & nav aktif */
+header [class*="AppHeaderButton"].header-link-active {
+  color: var(--accent) !important;
+}
+
+[class*="SidebarNavLink"].sidebar-active,
+[class*="TreeNavLink"].sidebar-active {
+  color: var(--accent-text) !important;
+  background-color: var(--accent-light) !important;
+}
+
+html[data-theme="dark"] [class*="SidebarNavLink"].sidebar-active,
+html[data-theme="dark"] [class*="TreeNavLink"].sidebar-active {
+  color: #ffffff !important;
+  background-color: var(--accent) !important;
+}
+
+a[class*="RefreshPreviewButton"],
+a[class*="RefreshPreviewButton"] > [class*="IconWrapper"],
+[class*="GoBackButtonStyle"] {
+  color: var(--url-text-color) !important;
+}
+
+/* Focus state senada brand */
+#nc-root input:focus,
+#nc-root textarea:focus,
+#nc-root select:focus,
+[class*="ControlContainer"] div[class$="-control"]:focus-within {
+  border-color: var(--accent) !important;
+  box-shadow: 0 0 0 3px var(--accent-light) !important;
+  outline: none !important;
+}
+
+#nc-root ::selection {
+  background: var(--accent-light);
+}
+
+/* Radius lebih lembut di kartu & modal */
+[class*="CollectionContainer"] [class*="Container-card"],
+[class*="CollectionContainer"] [class*="ListCard-card"],
+[class*="CollectionContainer"] [class*="GridCard-card"],
+[class*="StyledModal"],
+[class*="listControlItem"] {
+  border-radius: 10px !important;
+}
+
+/* Tombol toggle tema (di-inject oleh /admin/theme.js) */
+.cms-theme-toggle {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 500;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  border: 1px solid var(--accent-hover);
+  border-radius: 9999px;
+  background-color: var(--accent);
+  color: #ffffff;
+  box-shadow: 0 10px 24px rgba(217, 131, 39, 0.35);
+  transition: background-color 0.15s ease, transform 0.15s ease;
+}
+
+.cms-theme-toggle:hover {
+  background-color: var(--accent-hover);
+  transform: translateY(-1px);
+}
+
+.cms-theme-toggle:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--accent-light), 0 10px 24px rgba(217, 131, 39, 0.35);
+}
+
+.cms-theme-toggle svg {
+  width: 20px;
+  height: 20px;
+}
+
+.cms-theme-toggle .cms-theme-toggle-sun {
+  display: none;
+}
+
+html[data-theme="dark"] .cms-theme-toggle .cms-theme-toggle-sun {
+  display: block;
+}
+
+html[data-theme="dark"] .cms-theme-toggle .cms-theme-toggle-moon {
+  display: none;
+}

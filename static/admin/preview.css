@@ -1,0 +1,29 @@
+/* Preview pane editor Decap CMS — mengikuti tampilan blog mytheme.
+   Dimuat via CMS.registerPreviewStyle('/admin/preview.css') dari /admin/preview.js.
+   Variabel warna (--bg-body, --accent, dst.) disediakan oleh /css/style.css. */
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-primary);
+  padding: 0 1rem;
+}
+
+.post-layout {
+  margin-top: 1.75rem;
+  margin-bottom: 2rem;
+}
+
+/* Preview bukan dokumen hidup: cegah elemen dekoratif tampak bisa diklik. */
+.breadcrumbs,
+.badge-tag {
+  cursor: default;
+}
+
+.post-content img {
+  border-radius: var(--radius-md);
+}
+
+.preview-empty {
+  color: var(--text-muted);
+  font-style: italic;
+}
