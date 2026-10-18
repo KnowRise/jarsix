@@ -8,7 +8,7 @@ Pernahkah kamu berpikir bagaimana caranya sebuah pesan WhatsApp bisa sampai tepa
 
 Di dunia nyata, jika kita ingin mengirim paket ke seseorang, kita butuh alamat rumah yang jelas (nama jalan, nomor rumah, RT/RW, kota). Nah, di dunia digital alias jaringan komputer, konsep ini juga berlaku. "Alamat rumah" inilah yang kita sebut dengan **IP Address**.
 
-![]()
+![](/images/ip-address-blog-1.jpg)
 
 # **Apa itu IP Address?**
 
@@ -34,6 +34,8 @@ Karena panjangnya 32-bit, IPv4 "hanya" bisa menyediakan sekitar 4,3 miliar alama
 
 Untuk mengatasi kehabisan alamat IPv4, diciptakanlah IPv6. Bentuknya lebih panjang dan menggunakan kombinasi angka dan huruf (heksadesimal), contohnya: 2001:0db8:85a3:0000:0000:8a2e:0370:7334.
 Kapasitas IPv6 ini sangaaaat besar (128-bit), cukup untuk memberi IP Address ke setiap butir pasir di bumi!
+
+![](/images/ip-address-blog-2.png)
 
 # **Public IP vs Private IP (Berdasarkan Cakupan)**
 
@@ -62,35 +64,7 @@ Ini adalah kebalikan dari statis. IP dinamis **selalu berubah-ubah** setiap kali
 
 ## **Ringkasan Perbandingan**
 
-**Fitur**
-
-**IP Address Statis**
-
-**IP Address Dinamis**
-
-**Sifat**
-
-Tetap, tidak berubah-ubah
-
-Berubah-ubah secara otomatis
-
-**Pengaturan**
-
-Diketik manual oleh pengguna/admin
-
-Diberikan otomatis oleh *router* (DHCP)
-
-**Risiko *IP Conflict***
-
-Tinggi (jika salah ketik angka yang sama)
-
-Hampir tidak ada (diatur sistem)
-
-**Peruntukan**
-
-Server, Printer Jaringan, CCTV
-
-Laptop, *Smartphone*, *Smart* TV
+![](/images/ip-address-blog-table.png)
 
 IP Address adalah fondasi utama bagaimana internet bekerja. Ia memastikan miliaran perangkat di seluruh dunia bisa saling "mengobrol", bertukar data, dan mengirim informasi dengan akurat tanpa tertukar satu sama lain.
 
