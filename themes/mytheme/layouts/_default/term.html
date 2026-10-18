@@ -1,0 +1,21 @@
+{{ define "main" }}
+<div class="container">
+  <header class="taxonomy-hero">
+    <nav class="breadcrumbs" style="justify-content: center; margin-bottom: 1rem;" aria-label="Breadcrumb">
+      <a href="{{ site.BaseURL }}">Beranda</a>
+      <span>/</span>
+      <a href="{{ "tags/" | relURL }}">Tags</a>
+      <span>/</span>
+      <span class="breadcrumb-current">#{{ .Title }}</span>
+    </nav>
+    <h1 class="hero-title">#{{ .Title }}</h1>
+    <p class="hero-subtitle">Menampilkan {{ len .Pages }} artikel dengan tag ini.</p>
+  </header>
+
+  <div class="posts-grid" style="margin-top: 2rem;">
+    {{ range .Pages }}
+      {{ partial "post-card.html" . }}
+    {{ end }}
+  </div>
+</div>
+{{ end }}

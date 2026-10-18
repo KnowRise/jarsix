@@ -1,0 +1,56 @@
+{{ $tagsString := "" }}
+{{ if .Params.tags }}
+  {{ $tagsString = delimit .Params.tags "," }}
+{{ end }}
+
+<article class="post-card"
+  data-title="{{ .Title }}"
+  data-date="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}"
+  data-tags="{{ $tagsString }}"
+  data-excerpt="{{ .Summary | plainify }}">
+  
+  <a href="{{ .RelPermalink }}" class="card-media-wrapper" aria-label="{{ .Title }}">
+    {{ if .Params.coverImage }}
+      <img src="{{ .Params.coverImage | relURL }}" alt="{{ .Title }}" class="card-media-img" loading="lazy" />
+    {{ else }}
+      <div class="card-media-fallback">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
+        </svg>
+      </div>
+    {{ end }}
+  </a>
+
+  <div class="card-body">
+    <div class="card-meta">
+      <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 Jan 2006" }}</time>
+      <span>&bull;</span>
+      <span>{{ .ReadingTime }} menit baca</span>
+    </div>
+
+    {{ if .Params.tags }}
+      <div class="card-tags">
+        {{ range .Params.tags }}
+          <a href="{{ printf "tags/%s/" (. | urlize) | relURL }}" class="badge-tag">#{{ . }}</a>
+        {{ end }}
+      </div>
+    {{ end }}
+
+    <h2 class="card-title">
+      <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+    </h2>
+
+    <p class="card-excerpt">
+      {{ .Summary | plainify | truncate 130 }}
+    </p>
+
+    <div class="card-footer">
+      <a href="{{ .RelPermalink }}" class="read-more-link">
+        <span>Baca Selengkapnya</span>
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </a>
+    </div>
+  </div>
+</article>

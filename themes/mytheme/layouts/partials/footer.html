@@ -1,0 +1,12 @@
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <div class="footer-text">
+      &copy; {{ now.Format "2006" }} <a href="{{ site.BaseURL }}"><strong>{{ site.Title }}</strong></a>. Dibuat dengan cinta &amp; <a href="https://gohugo.io/" target="_blank" rel="noopener">Hugo</a>.
+    </div>
+    <div class="footer-links">
+      <a href="{{ site.BaseURL }}">Beranda</a>
+      <a href="{{ "tags/" | relURL }}">Semua Tags</a>
+      <a href="#top" onclick="window.scrollTo({top: 0, behavior: 'smooth'}); return false;">Kembali ke Atas &uarr;</a>
+    </div>
+  </div>
+</footer>

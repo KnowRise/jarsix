@@ -1,0 +1,9 @@
+name = "mytheme"
+license = "MIT"
+description = "A modern Hugo theme with responsive 2-4 column grid, instant search, sort, image collage gallery, tags, and dark mode."
+homepage = "https://github.com/KnowRise/nyoba-hugo"
+tags = ["blog", "grid", "search", "gallery", "dark-mode", "responsive"]
+min_version = "0.100.0"
+
+[author]
+  name = "KnowRise"

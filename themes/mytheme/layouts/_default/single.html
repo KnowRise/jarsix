@@ -1,0 +1,74 @@
+{{ define "main" }}
+<article class="post-layout">
+  <!-- Breadcrumbs Navigation -->
+  <nav class="breadcrumbs" aria-label="Breadcrumb">
+    <a href="{{ site.BaseURL }}">Beranda</a>
+    <span>/</span>
+    <a href="{{ "posts/" | relURL }}">Artikel</a>
+    <span>/</span>
+    <span class="breadcrumb-current">{{ .Title | truncate 30 }}</span>
+  </nav>
+
+  <!-- Post Header -->
+  <header class="post-header">
+    {{ if .Params.tags }}
+      <div class="post-header-tags">
+        {{ range .Params.tags }}
+          <a href="{{ printf "tags/%s/" (. | urlize) | relURL }}" class="badge-tag">#{{ . }}</a>
+        {{ end }}
+      </div>
+    {{ end }}
+
+    <h1 class="single-title">{{ .Title }}</h1>
+
+    <div class="post-meta-details">
+      <div class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <time datetime="{{ .Date.Format "2006-01-02" }}">{{ .Date.Format "02 January 2006" }}</time>
+      </div>
+
+      <div class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <span>{{ .ReadingTime }} menit waktu baca</span>
+      </div>
+
+      {{ with .Params.author | default site.Params.author }}
+      <div class="meta-item">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+        </svg>
+        <span>{{ . }}</span>
+      </div>
+      {{ end }}
+    </div>
+  </header>
+
+  <!-- Top Cover Image -->
+  {{ if .Params.coverImage }}
+  <figure class="single-cover-wrapper">
+    <img src="{{ .Params.coverImage | relURL }}" alt="{{ .Title }}" class="single-cover-img" />
+  </figure>
+  {{ end }}
+
+  <!-- Article Body Content -->
+  <div class="post-content">
+    {{ .Content }}
+  </div>
+
+  <!-- Bottom Tags & Share/Navigation -->
+  {{ if .Params.tags }}
+  <div style="margin-top: 3.5rem; padding-top: 1.5rem; border-top: 1px solid var(--border-color);">
+    <strong style="display: block; margin-bottom: 0.75rem; font-size: 0.95rem; color: var(--text-muted);">Tags Terkait:</strong>
+    <div style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+      {{ range .Params.tags }}
+        <a href="{{ printf "tags/%s/" (. | urlize) | relURL }}" class="badge-tag" style="font-size: 0.85rem; padding: 0.35rem 0.75rem;">#{{ . }}</a>
+      {{ end }}
+    </div>
+  </div>
+  {{ end }}
+</article>
+{{ end }}

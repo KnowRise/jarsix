@@ -2,6 +2,8 @@ backend:
   name: github
   repo: KnowRise/nyoba-hugo
   branch: main
+  base_url: https://decap-cms-oauth-lime-three.vercel.app
+  auth_endpoint: /api/auth
 
 media_folder: "static/images"
 public_folder: "/images"
@@ -17,4 +19,9 @@ collections:
       - { label: "Publish Date", name: "date", widget: "datetime" }
       - { label: "Draft", name: "draft", widget: "boolean", default: false }
       - { label: "Cover Image", name: "coverImage", widget: "image", required: false }
+      - label: "Tags"
+        name: "tags"
+        widget: "list"
+        required: false
+        field: { label: "Tag", name: "tag", widget: "string" }
       - { label: "Body", name: "body", widget: "markdown" }

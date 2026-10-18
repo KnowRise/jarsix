@@ -1,0 +1,17 @@
+{{ define "main" }}
+<div class="container">
+  <header class="taxonomy-hero">
+    <h1 class="hero-title">Semua Tags</h1>
+    <p class="hero-subtitle">Jelajahi artikel berdasarkan topik dan kata kunci.</p>
+  </header>
+
+  <div class="tags-cloud-wrapper">
+    {{ range .Data.Terms.Alphabetical }}
+      <a href="{{ .Page.RelPermalink }}" class="tag-cloud-item">
+        <span>#{{ .Page.Title }}</span>
+        <span class="tag-count">{{ .Count }} artikel</span>
+      </a>
+    {{ end }}
+  </div>
+</div>
+{{ end }}

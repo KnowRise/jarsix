@@ -1,0 +1,16 @@
+{{ define "main" }}
+<div class="container">
+  <header class="taxonomy-hero">
+    <h1 class="hero-title">{{ .Title }}</h1>
+    {{ with .Description }}
+      <p class="hero-subtitle">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  <div class="posts-grid" style="margin-top: 2rem;">
+    {{ range .Pages }}
+      {{ partial "post-card.html" . }}
+    {{ end }}
+  </div>
+</div>
+{{ end }}
