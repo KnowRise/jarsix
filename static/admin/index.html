@@ -39,5 +39,35 @@
     <script src="https://unpkg.com/marked@12.0.2/marked.min.js"></script>
     <script src="/admin/theme.js"></script>
     <script src="/admin/preview.js"></script>
+    <script>
+      /* Decap logout tidak melakukan redirect (hanya menghapus token user lalu
+         menampilkan halaman login di tempat). Pantau token di localStorage:
+         begitu hilang (proses logout selesai), arahkan ke baseUrl (root). */
+      (function () {
+        var KEYS = ['decap-cms-user', 'netlify-cms-user'];
+        var HOME_URL = window.location.pathname.replace(/\/admin\/?.*$/, '/');
+        var hasUser = function () {
+          try {
+            return KEYS.some(function (k) {
+              return localStorage.getItem(k) !== null;
+            });
+          } catch (e) {
+            return false;
+          }
+        };
+        var hadUser = hasUser();
+
+        setInterval(function () {
+          var now = hasUser();
+          if (hadUser && !now) {
+            // Grace period: antisipasi bug Decap yang remove lalu re-add token.
+            setTimeout(function () {
+              if (!hasUser()) window.location.href = HOME_URL;
+            }, 400);
+          }
+          hadUser = now;
+        }, 250);
+      })();
+    </script>
   </body>
 </html>
