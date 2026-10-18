@@ -1,6 +1,6 @@
 baseURL = 'https://nyoba-hugo.vercel.app/'
 locale = 'id-id'
-title = 'My New Hugo Project'
+title = 'jarkom Kelompok 6'
 theme = 'mytheme'
 
 [taxonomies]
@@ -8,5 +8,5 @@ theme = 'mytheme'
   category = 'categories'
 
 [params]
-  description = 'A modern, dynamic Hugo blog with search, sort, responsive grid, collage gallery, and dark mode'
+  description = 'Blog sederhana milik kelompok 6 dalam mata kuliah Jaringan Komputer'
   author = 'KnowRise'
