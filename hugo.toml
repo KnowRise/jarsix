@@ -1,6 +1,6 @@
 baseURL = 'https://nyoba-hugo.vercel.app/'
 locale = 'id-id'
-title = 'jarkom Kelompok 6'
+title = 'Kelompok 6 jarkom'
 theme = 'mytheme'
 
 [taxonomies]
