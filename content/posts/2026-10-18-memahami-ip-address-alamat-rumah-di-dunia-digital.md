@@ -3,6 +3,21 @@ title: "Memahami IP Address: 'Alamat Rumah' di Dunia Digital"
 date: 2026-10-18T18:33:00.000+07:00
 draft: false
 coverImage: /images/ip-address-blog-cover.jpeg
+tags:
+  - Ip Address
+  - Jaringan Komputer
+  - Networking
+  - Dasar Komputer
+  - IPv4
+  - IPv6
+  - Public IP
+  - Private IP
+  - Static IP
+  - Dynamic IP
+  - DHCP
+  - Belajar Jaringan
+  - Edukasi Teknologi
+  - Cara Kerja Internet
 ---
 Pernahkah kamu berpikir bagaimana caranya sebuah pesan WhatsApp bisa sampai tepat ke HP temanmu, dan bukan nyasar ke HP orang lain? Atau bagaimana laptop kamu bisa memutar video YouTube yang sama persis dengan yang kamu klik?
 
