@@ -3,6 +3,8 @@ title: Lorem Ipsum
 date: 2026-10-18T17:26:00.000+07:00
 draft: false
 coverImage: /images/infografis-user-persona-hilal.png
+tags:
+  - testing
 ---
 ## What is Lorem Ipsum?
 
