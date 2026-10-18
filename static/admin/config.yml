@@ -2,8 +2,6 @@ backend:
   name: github
   repo: KnowRise/nyoba-hugo
   branch: main
-  base_url: https://decap-cms-oauth-lime-three.vercel.app
-  auth_endpoint: /api/oauth
 
 media_folder: "static/images"
 public_folder: "/images"
