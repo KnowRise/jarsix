@@ -1417,6 +1417,10 @@ select:focus-visible {
   margin-bottom: 4rem;
 }
 
+.member-card-link {
+  display: block;
+}
+
 .member-card {
   background: var(--bg-surface);
   border: 1px solid var(--border-color);
