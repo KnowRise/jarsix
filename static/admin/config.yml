@@ -8,6 +8,22 @@ backend:
 media_folder: "static/images"
 public_folder: "/images"
 
+# Kompres & resize di browser sebelum upload masuk ke GitHub
+media_processing:
+  enabled: true
+  format:
+    enabled: true
+    default: webp
+  quality: 80
+  strip_metadata: true
+  width: 1600
+  height: null
+
+# Logo CMS (halaman login + header)
+logo:
+  src: /images/logo/logo.webp
+  show_in_header: true
+
 collections:
   - name: "posts"
     label: "Posts"
