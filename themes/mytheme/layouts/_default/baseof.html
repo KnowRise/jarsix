@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{{ if .IsHome }}{{ site.Title }}{{ else }}{{ .Title }} &middot; {{ site.Title }}{{ end }}</title>
   <meta name="description" content="{{ with .Description }}{{ . }}{{ else }}{{ with .Summary }}{{ . }}{{ else }}{{ site.Params.description }}{{ end }}{{ end }}">
+  <link rel="icon" type="image/webp" href="{{ "images/logo/logo.webp" | relURL }}">
 
   <!-- Theme Script (Prevent Flash of Unstyled Theme) -->
   <script>
