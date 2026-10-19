@@ -1,0 +1,82 @@
+{{ define "main" }}
+{{ $members := hugo.Data.members }}
+<div class="container">
+  <header class="taxonomy-hero">
+    <h1 class="hero-title">{{ .Title }}</h1>
+    {{ with .Description }}
+      <p class="hero-subtitle">{{ . }}</p>
+    {{ end }}
+  </header>
+
+  {{ with $members }}
+  <div class="members-toolbar">
+    <span class="members-count">{{ len . }} anggota kelompok</span>
+    <!-- <button type="button" class="btn-shuffle" id="shuffle-members-btn">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      <span>Acak Ulang</span>
+    </button> -->
+  </div>
+
+  <div class="members-grid" id="members-grid">
+    {{ range $i, $m := . }}
+    <article class="member-card" style="--i: {{ $i }};">
+      <div class="member-photo">
+        {{ if $m.foto }}
+          <img src="{{ printf "images/members/%s" $m.foto | relURL }}" alt="Foto {{ $m.nama }}" loading="lazy" />
+        {{ else }}
+          <div class="member-photo-fallback">
+            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </div>
+        {{ end }}
+      </div>
+      <div class="member-info">
+        <h2 class="member-card-name">{{ $m.nama }}</h2>
+        <span class="member-nim">{{ $m.nim }}</span>
+      </div>
+    </article>
+    {{ end }}
+  </div>
+  {{ else }}
+  <p class="members-empty">Belum ada data member. Tambahkan di <code>data/members.yaml</code>.</p>
+  {{ end }}
+</div>
+
+<script>
+(function () {
+  var grid = document.getElementById('members-grid');
+  var btn = document.getElementById('shuffle-members-btn');
+  if (!grid) return;
+
+  var cards = Array.prototype.slice.call(grid.querySelectorAll('.member-card'));
+  var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function shuffle(list) {
+    for (var i = list.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = list[i];
+      list[i] = list[j];
+      list[j] = tmp;
+    }
+    return list;
+  }
+
+  function play() {
+    grid.classList.remove('is-js');
+    void grid.offsetWidth;
+    var order = shuffle(cards.slice());
+    order.forEach(function (card, index) {
+      grid.appendChild(card);
+      card.style.setProperty('--i', index);
+    });
+    if (!reduced) grid.classList.add('is-js');
+  }
+
+  play();
+  if (btn) btn.addEventListener('click', play);
+})();
+</script>
+{{ end }}

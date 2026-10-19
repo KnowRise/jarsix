@@ -7,6 +7,7 @@
 
     <nav class="site-nav">
       <a href="{{ site.BaseURL }}" class="nav-link {{ if .IsHome }}active{{ end }}">Beranda</a>
+      <a href="{{ "member/" | relURL }}" class="nav-link {{ if eq .Section "member" }}active{{ end }}">Member</a>
       <a href="{{ "tags/" | relURL }}" class="nav-link {{ if eq .Section "tags" }}active{{ end }}">Tags</a>
 
       <button id="theme-toggle-btn" class="theme-toggle-btn" type="button" aria-label="Ganti mode gelap/terang">

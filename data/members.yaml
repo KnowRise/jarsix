@@ -1,0 +1,21 @@
+# Daftar member kelompok.
+# foto: nama file di static/images/members/ (pakai NIM sebagai nama file)
+- nama: "Muhammad Rifaa Siraajuddin Sugandi"
+  nim: "15250106"
+  foto: "15250106.jpeg"
+
+- nama: "Syahdan Aruna Haryani Putra"
+  nim: "15251140"
+  foto: "15251140.jpeg"
+
+- nama: "Syifa Syauqi Fauzani"
+  nim: "15250107"
+  foto: "15250107.jpeg"
+
+- nama: "Danda Anugrah Erzedd"
+  nim: "15251128"
+  foto: "15251128.jpeg"
+
+- nama: "Ezra Paiq"
+  nim: "15250144"
+  foto: "15250144.jpeg"
