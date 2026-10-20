@@ -1,5 +1,5 @@
 <header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30">
-  <div class="h-16 w-full px-gutter flex items-center justify-between gap-gutter">
+  <div class="h-16 w-full px-gutter-mobile md:px-gutter flex items-center justify-between gap-gutter">
     <div class="flex items-center gap-space-md">
       <img alt="{{ site.Title }} Logo" class="h-8 w-auto object-contain" src="{{ "images/logo/logo.webp" | relURL }}" />
       <a class="flex items-baseline text-on-surface hover:text-primary transition-colors" href="{{ "/" | relURL }}">
@@ -16,5 +16,57 @@
       <a href="{{ "tags/" | relURL }}"
          class="font-label-md text-label-md uppercase tracking-wider py-1 px-space-xs transition-colors {{ if eq .Section "tags" }}text-primary-container border-b-2 border-primary-container font-semibold{{ else }}text-on-surface-variant hover:text-on-surface{{ end }}">[ TAGS ]</a>
     </nav>
+
+    <button type="button" id="nav-toggle" aria-label="Buka menu navigasi" aria-expanded="false" aria-controls="mobile-nav"
+      class="md:hidden w-10 h-10 flex items-center justify-center bg-surface-container text-on-surface-variant hover:text-primary-container transition-colors"
+      style="clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);">
+      <span class="material-symbols-outlined text-[22px]" id="nav-toggle-icon">menu</span>
+    </button>
   </div>
+
+  <!-- Nav mobile (hamburger) -->
+  <nav id="mobile-nav" class="hidden md:hidden bg-surface-container-low border-t border-outline-variant/30" aria-label="Navigasi mobile">
+    <div class="flex flex-col px-gutter-mobile md:px-gutter py-space-sm">
+      <a href="{{ "/" | relURL }}"
+         class="font-label-md text-label-md uppercase tracking-wider py-space-sm px-space-xs transition-colors {{ if .IsHome }}text-primary-container font-semibold{{ else }}text-on-surface-variant hover:text-on-surface{{ end }}">[ HOME ]</a>
+      <a href="{{ "member/" | relURL }}"
+         class="font-label-md text-label-md uppercase tracking-wider py-space-sm px-space-xs transition-colors {{ if eq .Section "member" }}text-primary-container font-semibold{{ else }}text-on-surface-variant hover:text-on-surface{{ end }}">[ MEMBERS ]</a>
+      <a href="{{ "tags/" | relURL }}"
+         class="font-label-md text-label-md uppercase tracking-wider py-space-sm px-space-xs transition-colors {{ if eq .Section "tags" }}text-primary-container font-semibold{{ else }}text-on-surface-variant hover:text-on-surface{{ end }}">[ TAGS ]</a>
+    </div>
+  </nav>
 </header>
+
+<script>
+  (function () {
+    var toggle = document.getElementById('nav-toggle');
+    var icon = document.getElementById('nav-toggle-icon');
+    var menu = document.getElementById('mobile-nav');
+    if (!toggle || !menu) return;
+
+    function setOpen(open) {
+      menu.classList.toggle('hidden', !open);
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+      if (icon) icon.textContent = open ? 'close' : 'menu';
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.stopPropagation();
+      setOpen(menu.classList.contains('hidden'));
+    });
+
+    menu.querySelectorAll('a').forEach(function (link) {
+      link.addEventListener('click', function () { setOpen(false); });
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!menu.classList.contains('hidden') && !menu.contains(e.target) && !toggle.contains(e.target)) {
+        setOpen(false);
+      }
+    });
+
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && !menu.classList.contains('hidden')) setOpen(false);
+    });
+  })();
+</script>

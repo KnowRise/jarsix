@@ -1,5 +1,5 @@
 {{ define "main" }}
-<article class="w-full px-gutter py-space-xl">
+<article class="w-full px-gutter-mobile md:px-gutter py-space-xl">
   <div class="max-w-4xl mx-auto">
 
     <!-- Breadcrumbs -->
@@ -35,7 +35,9 @@
           <span class="material-symbols-outlined text-[16px] text-secondary-container">schedule</span>
           {{ .ReadingTime }} menit baca
         </span>
-        {{- with .Params.author | default site.Params.author }}
+        {{- $author := .Params.author -}}
+        {{- if not $author }}{{ with .GitInfo }}{{ $author = .AuthorName }}{{ end }}{{ end -}}
+        {{- with ($author | default site.Params.author) }}
         <span class="flex items-center gap-1.5">
           <span class="material-symbols-outlined text-[16px] text-primary-container">person</span>
           {{ . }}

@@ -10,7 +10,7 @@
 {{- $totalPosts := len (where site.RegularPages "Section" "posts") -}}
 
 <!-- Hero -->
-<section class="relative w-full overflow-hidden bg-surface py-space-xl px-gutter">
+<section class="relative w-full overflow-hidden bg-surface py-space-xl px-gutter-mobile md:px-gutter">
   <div class="absolute -top-32 right-12 w-96 h-96 rounded-full bg-secondary-container/5 blur-3xl pointer-events-none"></div>
   <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-primary-container/5 blur-3xl pointer-events-none"></div>
   <div class="max-w-6xl mx-auto flex flex-col gap-space-lg relative z-10">
@@ -21,7 +21,7 @@
         <span class="text-on-surface-variant/40">/</span>
         <span class="text-secondary">INDEX_V2</span>
       </div>
-      <div class="flex items-center gap-space-sm font-code-snippet text-code-snippet text-on-surface-variant">
+      <div class="flex flex-wrap items-center gap-space-sm font-code-snippet text-code-snippet text-on-surface-variant">
         <span class="text-primary-container font-semibold">{{ len $tagList }}</span>
         <span>TOPIK AKTIF</span>
         <span class="text-on-surface-variant/40">&bull;</span>
@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="flex flex-col gap-space-xs">
-      <h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Indeks Topik &amp; Tag</h1>
+      <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface tracking-tight">Indeks Topik &amp; Tag</h1>
       <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
         Jelajahi seluruh tutorial dan dokumentasi berdasarkan teknologi jaringan, protokol, dan konfigurasi perangkat.
       </p>
@@ -46,7 +46,7 @@
 </section>
 
 <!-- Tag Pills -->
-<div class="w-full bg-surface-container-lowest px-gutter py-space-xl">
+<div class="w-full bg-surface-container-lowest px-gutter-mobile md:px-gutter py-space-xl">
   <div class="max-w-6xl mx-auto flex flex-col gap-space-lg">
     <div class="flex flex-wrap items-center justify-between gap-space-md pb-space-xs">
       <div class="flex items-center gap-space-sm">
@@ -132,24 +132,6 @@
   </div>
 </div>
 
-<!-- Contribute CTA -->
-<section class="w-full bg-surface py-space-xl px-gutter">
-  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-space-lg p-space-lg bg-surface-container-low rounded-DEFAULT"
-    style="clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);">
-    <div class="flex flex-col gap-1">
-      <div class="flex items-center gap-2 font-label-sm text-label-sm uppercase tracking-wider text-primary-container">
-        <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
-        <span>DOKUMENTASI KOMUNITAS</span>
-      </div>
-      <h3 class="font-headline-md text-headline-md text-on-surface">Punya artikel atau analisis protokol baru?</h3>
-      <p class="font-body-sm text-body-sm text-on-surface-variant">Kontribusi writeup jaringan dan lab-mu langsung lewat CMS {{ site.Title }}.</p>
-    </div>
-    <a class="flex-shrink-0 px-6 py-3 bg-primary-container text-on-primary-container font-code-snippet text-code-snippet uppercase font-bold tracking-wider hover:opacity-90 transition-opacity"
-      href="{{ "admin/" | relURL }}" style="clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);">
-      [ AJUKAN WRITEUP ]
-    </a>
-  </div>
-</section>
 {{ end }}
 
 {{ define "scripts" }}

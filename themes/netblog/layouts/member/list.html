@@ -3,7 +3,7 @@
 {{- $postCount := len (where site.RegularPages "Section" "posts") -}}
 
 <!-- Hero Section -->
-<section class="relative w-full px-gutter py-space-xl overflow-hidden bg-surface-container-lowest">
+<section class="relative w-full px-gutter-mobile md:px-gutter py-space-xl overflow-hidden bg-surface-container-lowest">
   <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[radial-gradient(#ffd700_1px,transparent_1px)] [background-size:24px_24px]"></div>
   <div class="max-w-7xl mx-auto flex flex-col gap-space-lg relative z-10">
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md pb-space-lg bg-surface-container-low p-space-lg shadow-sm">
@@ -12,7 +12,7 @@
           <span class="inline-block w-2.5 h-2.5 bg-primary-container"></span>
           <span class="font-label-sm text-label-sm tracking-widest uppercase text-primary-container">COMMUNITY REGISTRY // {{ now.Year }}</span>
         </div>
-        <h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">{{ .Title }}</h1>
+        <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface tracking-tight">{{ .Title }}</h1>
         <p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
           {{ .Description | default "Para anggota kelompok yang berbagi tutorial dan studi kasus arsitektur jaringan di {{ site.Title }}." }}
         </p>
@@ -32,7 +32,7 @@
 </section>
 
 <!-- Members Grid -->
-<section class="w-full px-gutter py-space-xl bg-surface">
+<section class="w-full px-gutter-mobile md:px-gutter py-space-xl bg-surface">
   <div class="max-w-7xl mx-auto">
     {{- with $members }}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg" id="members-grid">
@@ -81,7 +81,7 @@
 </section>
 
 <!-- Open Call CTA -->
-<section class="w-full px-gutter py-space-xl bg-surface-container-lowest relative overflow-hidden">
+<section class="w-full px-gutter-mobile md:px-gutter py-space-xl bg-surface-container-lowest relative overflow-hidden">
   <div class="max-w-7xl mx-auto relative z-10">
     <div class="relative bg-surface-container p-space-lg md:p-space-xl [clip-path:polygon(0_0,calc(100%-20px)_0,100%_20px,100%_100%,0_100%)] shadow-2xl">
       <div class="absolute top-0 right-0 w-5 h-5 bg-primary-container"></div>
@@ -93,7 +93,7 @@
             <span class="text-outline-variant font-label-sm text-label-sm">//</span>
             <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">COMMUNITY PIPELINE</span>
           </div>
-          <h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Ingin Berbagi Pengalaman Jaringan?</h2>
+          <h2 class="font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface tracking-tight">Ingin Berbagi Pengalaman Jaringan?</h2>
           <p class="font-body-md text-body-md text-on-surface-variant">
             Jelajahi dokumentasi dan tutorial jaringan yang sudah dibuat oleh anggota kelompok.
           </p>

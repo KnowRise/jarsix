@@ -5,6 +5,10 @@ title = 'JARSIX'
 # Ganti nilai di bawah untuk pindah theme, lalu build ulang.
 theme = 'netblog'
 
+# Ambil info author (dan tanggal) dari git commit — dipakai untuk
+# menampilkan nama lengkap akun CMS yang terakhir mengedit artikel.
+enableGitInfo = true
+
 [taxonomies]
   tag = 'tags'
 
