@@ -1,4 +1,7 @@
-<style>
+{{- /* Gaya isi artikel (.post-content) — dipakai oleh baseof (blog) dan
+       direplikasi manual di static/admin/preview.css untuk panel preview CMS.
+       Kalau file ini diubah, sinkronkan juga static/admin/preview.css. */ -}}
+{{ define "prose-css" }}
   .post-content { max-width: 760px; margin: 0 auto; color: #d0c6ab; font-size: 18px; line-height: 28px; }
   .post-content > * + * { margin-top: 1.25rem; }
   .post-content h1, .post-content h2, .post-content h3, .post-content h4 {
@@ -52,4 +55,5 @@
     .post-content h1 { font-size: 26px; line-height: 34px; }
     .post-content h2 { font-size: 22px; line-height: 30px; }
   }
-</style>
+{{ end }}
+<style>{{ template "prose-css" . }}</style>

@@ -1,5 +1,6 @@
-/* Preview template Decap CMS untuk collection "posts" — meniru layout single.html
-   blog mytheme (breadcrumb, badge tag, judul, meta, cover, isi).
+/* Preview template Decap CMS untuk collection "posts" — meniru layout
+   themes/netblog/layouts/_default/single.html (breadcrumbs, badge tag, judul,
+   meta tanggal/baca/author, cover, isi). Gaya visual ada di /admin/preview.css.
 
    Dimuat dari /admin/index.html setelah decap-cms.js. Karena index.html menyetel
    CMS_MANUAL_INIT, di sini kita registrasi dulu lalu panggil CMS.init().
@@ -14,12 +15,19 @@
 
   try {
     if (!h) throw new Error('window.h (React.createElement) tidak tersedia');
+  } catch (err) {
+    console.error('[admin] Preview tidak bisa dijalankan:', err);
+  }
 
-    CMS.registerPreviewStyle('/css/style.css');
+  /* Lapis pertama: daftarkan style agar Decap ikut menyalinnya ke iframe.
+     (Lapis kedua adalah penyuntikan <style> di bagian bawah file, karena cara
+     ini tidak selalu ter-apply di iframe srcdoc.) */
+  try {
     CMS.registerPreviewStyle('/admin/preview.css');
   } catch (err) {
-    console.error('[admin] Gagal registrasi preview style:', err);
+    console.warn('[admin] registerPreviewStyle gagal, mengandalkan injeksi <style>', err);
   }
+
 
   function toArray(value) {
     if (!value) return [];
@@ -93,7 +101,7 @@
   }
 
   function metaItem(key, iconPath, label) {
-    return h('div', { key: key, className: 'meta-item' }, icon(key, iconPath), h('span', {}, label));
+    return h('span', { key: key, className: 'meta-item' }, icon(key, iconPath), h('span', {}, label));
   }
 
   function PostPreview(props) {
@@ -102,6 +110,7 @@
     var cover = data.get('coverImage') || '';
     var body = data.get('body') || '';
     var date = formatDate(data.get('date'));
+    var author = data.get('author') || (window.SITE_PARAMS && window.SITE_PARAMS.author) || '';
     var tags = toArray(data.get('tags'))
       .map(tagValue)
       .filter(Boolean);
@@ -113,9 +122,9 @@
         'nav',
         { key: 'breadcrumbs', className: 'breadcrumbs', 'aria-label': 'Breadcrumb' },
         h('span', {}, 'Beranda'),
-        h('span', {}, '/'),
-        h('span', {}, 'Artikel'),
-        h('span', {}, '/'),
+        h('span', { className: 'sep' }, '/'),
+        h('span', {}, 'Tags'),
+        h('span', { className: 'sep' }, '/'),
         h('span', { className: 'breadcrumb-current' }, title)
       )
     );
@@ -136,24 +145,34 @@
 
     headerChildren.push(h('h1', { key: 'title', className: 'single-title' }, title));
 
-    headerChildren.push(
-      h(
-        'div',
-        { key: 'meta', className: 'post-meta-details' },
-        date
-          ? metaItem(
-              'date',
-              'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
-              date
-            )
-          : null,
+    var metaChildren = [];
+    if (date) {
+      metaChildren.push(
         metaItem(
-          'reading',
-          'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
-          readingTime(body) + ' menit waktu baca'
+          'date',
+          'M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z',
+          date
         )
+      );
+    }
+    metaChildren.push(
+      metaItem(
+        'reading',
+        'M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z',
+        readingTime(body) + ' menit baca'
       )
     );
+    if (author) {
+      metaChildren.push(
+        metaItem(
+          'author',
+          'M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z',
+          author
+        )
+      );
+    }
+
+    headerChildren.push(h('div', { key: 'meta', className: 'post-meta-details' }, metaChildren));
 
     children.push(h('header', { key: 'header', className: 'post-header' }, headerChildren));
 
@@ -190,4 +209,70 @@
   } catch (err) {
     console.error('[admin] Gagal init Decap CMS:', err);
   }
+
+  /* --------------------------------------------------------------------------
+     Injeksi <style> ke iframe preview.
+     registerPreviewStyle() tidak selalu membuat gaya ter-apply di iframe srcdoc
+     (base URL / timing). Maka CSS di-fetch sebagai teks lalu disuntik langsung
+     sebagai <style> ke <head> tiap iframe preview. Idempoten & aman.
+     -------------------------------------------------------------------------- */
+  function theme() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  }
+
+  var previewCssText = null;
+  var previewCssPromise = null;
+
+  function loadPreviewCss() {
+    if (previewCssPromise) return previewCssPromise;
+    previewCssPromise = fetch('/admin/preview.css', { cache: 'no-cache' })
+      .then(function (r) { return r.text(); })
+      .then(function (text) { previewCssText = text; return text; })
+      .catch(function (err) {
+        console.error('[admin] Gagal memuat preview.css:', err);
+        return '';
+      });
+    return previewCssPromise;
+  }
+  loadPreviewCss();
+
+  function injectStyleTag(doc) {
+    if (doc.querySelector('style[data-ok-preview]')) return;
+    var style = doc.createElement('style');
+    style.setAttribute('data-ok-preview', '1');
+    style.textContent = previewCssText || '';
+    doc.head.appendChild(style);
+  }
+
+  function styleIframe(frame) {
+    if (!frame) return;
+    var doc;
+    try {
+      doc = frame.contentDocument;
+    } catch (err) {
+      return; /* cross-origin (identity widget) */
+    }
+    if (!doc || !doc.head) return;
+
+    if (previewCssText != null) {
+      injectStyleTag(doc);
+    } else {
+      loadPreviewCss().then(function () { injectStyleTag(doc); });
+    }
+
+    var want = theme();
+    if (doc.documentElement.getAttribute('data-theme') !== want) {
+      doc.documentElement.setAttribute('data-theme', want);
+    }
+  }
+
+  function scanFrames() {
+    var frames = document.querySelectorAll('iframe');
+    for (var i = 0; i < frames.length; i++) styleIframe(frames[i]);
+  }
+
+  /* Decap me-render ulang preview saat mengetik; pantau ringan agar <style>
+     selalu ada di iframe terbaru. Idempoten (dilewati bila sudah terpasang). */
+  setInterval(scanFrames, 800);
+  window.addEventListener('load', scanFrames);
 })();
