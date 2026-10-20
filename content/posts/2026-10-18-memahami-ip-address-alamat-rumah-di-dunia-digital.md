@@ -1,5 +1,5 @@
 ---
-title: "Memahami IP Address: 'Alamat Rumah' di Dunia Digita"
+title: "Memahami IP Address: 'Alamat Rumah' di Dunia Digitall"
 date: 2026-10-18T18:33:00.000+07:00
 draft: false
 coverImage: /images/ip-address-blog-cover.webp
