@@ -1,0 +1,29 @@
+<footer class="w-full bg-surface-container-lowest border-t border-outline-variant/30 relative overflow-hidden">
+  <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[radial-gradient(#ffd700_1px,transparent_1px)] [background-size:16px_16px]"></div>
+  <div class="w-full px-gutter py-space-xl relative z-10">
+    <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-space-lg pb-space-lg border-b border-outline-variant/20">
+      <div class="space-y-space-xs">
+        <div class="flex items-center gap-space-xs">
+          <span class="font-headline-sm text-headline-sm uppercase text-on-surface">{{ site.Title }}</span>
+          <span class="text-primary-container font-bold font-label-md text-label-md">//</span>
+          <span class="font-body-sm text-body-sm text-on-surface-variant">{{ site.Params.description | default "Blog Jaringan Komputer" }}</span>
+        </div>
+        <p class="font-code-snippet text-code-snippet text-on-surface-variant/70">Dokumentasi teknis, tutorial, dan analisis jaringan untuk pembelajaran.</p>
+      </div>
+      <nav class="flex flex-wrap items-center gap-space-md font-label-sm text-label-sm text-on-surface-variant">
+        <a class="transition-colors {{ if .IsHome }}text-primary-container font-medium{{ else }}hover:text-on-surface{{ end }}" href="{{ "/" | relURL }}">HOME</a>
+        <span class="text-outline-variant/40">/</span>
+        <a class="transition-colors {{ if eq .Section "member" }}text-primary-container font-medium{{ else }}hover:text-on-surface{{ end }}" href="{{ "member/" | relURL }}">MEMBERS</a>
+        <span class="text-outline-variant/40">/</span>
+        <a class="transition-colors {{ if eq .Section "tags" }}text-primary-container font-medium{{ else }}hover:text-on-surface{{ end }}" href="{{ "tags/" | relURL }}">TAGS</a>
+      </nav>
+    </div>
+    <div class="pt-space-md flex flex-col sm:flex-row justify-between items-center gap-space-sm font-label-sm text-label-sm text-on-surface-variant/60">
+      <p>&copy; {{ now.Year }} {{ site.Title }}. {{ site.Params.description | default "" }}</p>
+      <div class="flex items-center gap-space-sm font-code-snippet text-code-snippet text-outline">
+        <span class="inline-block w-2 h-2 rounded-full bg-secondary-container/80"></span>
+        <span>SYSTEM_READY</span>
+      </div>
+    </div>
+  </div>
+</footer>

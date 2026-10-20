@@ -1,0 +1,87 @@
+{{ define "main" }}
+<article class="w-full px-gutter py-space-xl">
+  <div class="max-w-4xl mx-auto">
+
+    <!-- Breadcrumbs -->
+    <nav class="flex flex-wrap items-center gap-space-sm font-label-sm text-label-sm uppercase tracking-wider text-on-surface-variant mb-space-lg" aria-label="Breadcrumb">
+      <a href="{{ "/" | relURL }}" class="hover:text-primary-container transition-colors">Beranda</a>
+      <span class="text-outline-variant/40">/</span>
+      <a href="{{ "tags/" | relURL }}" class="hover:text-primary-container transition-colors">Tags</a>
+      <span class="text-outline-variant/40">/</span>
+      <span class="text-on-surface normal-case font-body-sm truncate max-w-[16rem]">{{ .Title }}</span>
+    </nav>
+
+    <!-- Post header -->
+    <header class="flex flex-col gap-space-sm pb-space-lg border-b border-outline-variant/30">
+      <div class="flex flex-wrap items-center gap-space-xs">
+        {{- range (.Params.tags | default slice) }}
+        <a href="{{ printf "tags/%s/" (. | urlize) | relURL }}"
+          class="px-2 py-0.5 bg-surface-container-high text-secondary-container font-label-sm text-label-sm rounded-DEFAULT hover:text-secondary transition-colors">
+          #{{ . }}
+        </a>
+        {{- end }}
+      </div>
+
+      <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface tracking-tight">
+        {{ .Title }}
+      </h1>
+
+      <div class="flex flex-wrap items-center gap-space-md font-label-sm text-label-sm text-on-surface-variant">
+        <span class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">calendar_today</span>
+          <time datetime="{{ .Date.Format "2006-01-02" }}">{{ partial "date-id.html" . }}</time>
+        </span>
+        <span class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-secondary-container">schedule</span>
+          {{ .ReadingTime }} menit baca
+        </span>
+        {{- with .Params.author | default site.Params.author }}
+        <span class="flex items-center gap-1.5">
+          <span class="material-symbols-outlined text-[16px] text-primary-container">person</span>
+          {{ . }}
+        </span>
+        {{- end }}
+      </div>
+    </header>
+
+    <!-- Cover -->
+    {{- with .Params.coverImage }}
+    <figure class="mt-space-lg">
+      <img class="w-full object-cover" src="{{ . | relURL }}" alt="{{ $.Title }}"
+        style="clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);" />
+    </figure>
+    {{- end }}
+
+    <!-- Content -->
+    <div class="post-content mt-space-lg">
+      {{ .Content }}
+    </div>
+
+    <!-- Prev / Next -->
+    {{- $prev := .PrevInSection -}}
+    {{- $next := .NextInSection -}}
+    {{- if or $prev $next }}
+    <nav class="mt-space-xl pt-space-lg border-t border-outline-variant/30 flex flex-col sm:flex-row gap-space-md justify-between">
+      {{- with $prev }}
+      <a href="{{ .RelPermalink }}" class="group flex-1 p-space-md bg-surface-container-low hover:bg-surface-container transition-all"
+        style="clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);">
+        <span class="font-label-sm text-label-sm text-on-surface-variant uppercase flex items-center gap-1">
+          <span class="material-symbols-outlined text-[14px]">chevron_left</span> Sebelumnya
+        </span>
+        <p class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary-container transition-colors mt-1 line-clamp-2">{{ .Title }}</p>
+      </a>
+      {{- end }}
+      {{- with $next }}
+      <a href="{{ .RelPermalink }}" class="group flex-1 p-space-md bg-surface-container-low hover:bg-surface-container transition-all sm:text-right"
+        style="clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);">
+        <span class="font-label-sm text-label-sm text-on-surface-variant uppercase flex items-center gap-1 sm:justify-end">
+          Berikutnya <span class="material-symbols-outlined text-[14px]">chevron_right</span>
+        </span>
+        <p class="font-headline-sm text-headline-sm text-on-surface group-hover:text-primary-container transition-colors mt-1 line-clamp-2">{{ .Title }}</p>
+      </a>
+      {{- end }}
+    </nav>
+    {{- end }}
+  </div>
+</article>
+{{ end }}

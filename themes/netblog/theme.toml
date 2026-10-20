@@ -1,0 +1,9 @@
+name = "netblog"
+license = "MIT"
+description = "Dark editorial theme for JARSIX based on the NET-BLOG mockup: Tailwind CDN, Space Grotesk typography, clip-path cards, client-side search/filter/pagination."
+homepage = "https://github.com/KnowRise/nyoba-hugo"
+tags = ["blog", "dark", "tailwind", "grid", "search", "responsive"]
+min_version = "0.100.0"
+
+[author]
+  name = "KnowRise"

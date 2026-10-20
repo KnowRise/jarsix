@@ -1,0 +1,20 @@
+<header class="fixed top-0 left-0 w-full z-50 bg-surface/90 backdrop-blur-md border-b border-outline-variant/30">
+  <div class="h-16 w-full px-gutter flex items-center justify-between gap-gutter">
+    <div class="flex items-center gap-space-md">
+      <img alt="{{ site.Title }} Logo" class="h-8 w-auto object-contain" src="{{ "images/logo/logo.webp" | relURL }}" />
+      <a class="flex items-baseline text-on-surface hover:text-primary transition-colors" href="{{ "/" | relURL }}">
+        <span class="font-headline-sm text-headline-sm uppercase tracking-tight">{{ site.Title }}</span>
+        <span class="font-headline-sm text-headline-sm text-primary-container ml-space-xs font-bold">/</span>
+      </a>
+    </div>
+
+    <nav class="hidden md:flex items-center gap-space-lg">
+      <a href="{{ "/" | relURL }}"
+         class="font-label-md text-label-md uppercase tracking-wider py-1 px-space-xs transition-colors {{ if .IsHome }}text-primary-container border-b-2 border-primary-container font-semibold{{ else }}text-on-surface-variant hover:text-on-surface{{ end }}">[ HOME ]</a>
+      <a href="{{ "member/" | relURL }}"
+         class="font-label-md text-label-md uppercase tracking-wider py-1 px-space-xs transition-colors {{ if eq .Section "member" }}text-primary-container border-b-2 border-primary-container font-semibold{{ else }}text-on-surface-variant hover:text-on-surface{{ end }}">[ MEMBERS ]</a>
+      <a href="{{ "tags/" | relURL }}"
+         class="font-label-md text-label-md uppercase tracking-wider py-1 px-space-xs transition-colors {{ if eq .Section "tags" }}text-primary-container border-b-2 border-primary-container font-semibold{{ else }}text-on-surface-variant hover:text-on-surface{{ end }}">[ TAGS ]</a>
+    </nav>
+  </div>
+</header>

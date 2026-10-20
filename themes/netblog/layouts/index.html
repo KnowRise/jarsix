@@ -1,0 +1,317 @@
+{{ define "main" }}
+<!-- Minimalist Editorial Hero Section -->
+<section class="w-full px-gutter-mobile md:px-gutter pt-space-xl pb-space-lg max-w-7xl mx-auto">
+  <div class="flex flex-col gap-space-sm max-w-3xl">
+    <div class="flex items-center gap-space-xs font-label-sm text-label-sm text-primary-container tracking-wider uppercase">
+      <span class="inline-block w-2 h-2 rounded-full bg-primary-container"></span>
+      <span>Dokumentasi Teknis &amp; Analisis Jaringan</span>
+    </div>
+    <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface tracking-tight">
+      Blog Jaringan Komputer
+    </h1>
+    <p class="font-body-lg text-body-md md:text-body-lg text-on-surface-variant max-w-2xl leading-relaxed">
+      {{ site.Params.description | default "Panduan praktis, tutorial routing, switching, dan konfigurasi jaringan untuk pemula hingga profesional." }}
+    </p>
+  </div>
+</section>
+
+{{- /* Semua tag + jumlah pemakaian; featured = paling sering dipakai */ -}}
+{{- $tagList := slice -}}
+{{- range $name, $tax := site.Taxonomies.tags -}}
+  {{- $tagList = $tagList | append (dict "name" $name "slug" ($name | urlize) "count" (len $tax)) -}}
+{{- end -}}
+{{- $tagList = sort $tagList "name" -}}
+{{- $byCount := sort $tagList "count" "desc" -}}
+{{- $featured := first 6 $byCount -}}
+{{- $featuredSlugs := slice -}}
+{{- range $featured -}}{{- $featuredSlugs = $featuredSlugs | append .slug -}}{{- end -}}
+
+<!-- Filter & Search Utilities -->
+<section class="w-full px-gutter-mobile md:px-gutter pb-space-xl max-w-7xl mx-auto">
+  <div class="flex flex-col lg:flex-row items-stretch lg:items-center justify-between gap-space-md bg-surface-container-low p-space-sm md:p-space-md rounded-lg shadow-sm">
+    <!-- Search Input (lebar) -->
+    <div class="relative flex-1">
+      <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[20px]">search</span>
+      <input class="w-full pl-10 pr-4 py-2.5 bg-surface-container-lowest text-on-surface placeholder:text-on-surface-variant/60 font-body-sm text-body-sm rounded-DEFAULT focus:outline-none transition-colors"
+        id="article-search" placeholder="Search..." type="text" />
+    </div>
+    <!-- Tag Filters (beberapa saja + modal) -->
+    <div class="flex flex-wrap items-center gap-2" id="filter-container" data-featured="{{ delimit $featuredSlugs "," }}">
+      <button class="filter-btn px-3 py-1.5 font-label-sm text-label-sm uppercase transition-all bg-primary-container text-on-primary-container font-semibold"
+        data-filter="all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">#ALL</button>
+      {{- range $featured }}
+      <button class="filter-btn px-3 py-1.5 font-label-sm text-label-sm uppercase transition-all bg-surface-container text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high"
+        data-filter="{{ .slug }}" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">#{{ .name | upper }}</button>
+      {{- end }}
+      <button id="more-tags-btn" type="button"
+        class="px-3 py-1.5 font-label-sm text-label-sm uppercase transition-all bg-surface-container-high text-secondary-container hover:text-secondary font-semibold"
+        style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">MORE +</button>
+    </div>
+  </div>
+</section>
+
+<!-- Blog Article Grid -->
+<section class="w-full px-gutter-mobile md:px-gutter max-w-7xl mx-auto">
+  {{- $posts := where site.RegularPages "Section" "posts" -}}
+  {{- if $posts }}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg" id="article-grid">
+    {{- range $posts }}
+      {{- partial "post-card.html" . }}
+    {{- end }}
+  </div>
+
+  <!-- Empty state saat search/filter tidak menemukan apa pun -->
+  <div class="hidden flex-col items-center justify-center py-space-xl text-center" id="no-results">
+    <span class="material-symbols-outlined text-outline text-[48px] mb-space-sm">search_off</span>
+    <h3 class="font-headline-md text-headline-md text-on-surface">Artikel Tidak Ditemukan</h3>
+    <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Coba kata kunci lain atau pilih filter #ALL.</p>
+  </div>
+
+  <!-- Pagination (client-side) -->
+  <section class="w-full py-space-xl">
+    <div class="flex items-center justify-center gap-2 font-label-md text-label-md" id="pagination"></div>
+  </section>
+  {{- else }}
+  <div class="flex flex-col items-center justify-center py-space-xl text-center">
+    <span class="material-symbols-outlined text-outline text-[48px] mb-space-sm">article</span>
+    <h3 class="font-headline-md text-headline-md text-on-surface">Belum Ada Artikel</h3>
+    <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Artikel pertama akan muncul di sini.</p>
+  </div>
+  {{- end }}
+</section>
+
+<!-- Modal: Semua Tag -->
+<div id="tag-modal" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
+  <div class="absolute inset-0 bg-surface/80 backdrop-blur-sm" data-modal-close></div>
+  <div class="absolute left-1/2 -translate-x-1/2 top-20 w-[92vw] max-w-2xl bg-surface-container border border-outline-variant/40 shadow-2xl"
+    style="clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);">
+    <div class="flex items-center justify-between p-space-md border-b border-outline-variant/30">
+      <div class="flex items-center gap-space-sm">
+        <span class="w-2 h-2 bg-primary-container"></span>
+        <h3 class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-wide">Semua Tag</h3>
+        <span class="font-code-snippet text-code-snippet text-on-surface-variant">({{ len $tagList }})</span>
+      </div>
+      <button type="button" id="close-tag-modal" aria-label="Tutup" class="w-8 h-8 flex items-center justify-center bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <div class="p-space-md border-b border-outline-variant/30">
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">search</span>
+        <input id="modal-tag-search" type="text" placeholder="Search..."
+          class="w-full pl-9 pr-3 py-2 bg-surface-container-lowest border border-outline-variant/40 text-on-surface placeholder:text-on-surface-variant/60 font-body-sm text-body-sm rounded-DEFAULT focus:outline-none focus:border-secondary-container transition-colors" />
+      </div>
+    </div>
+    <div class="p-space-md max-h-[50vh] overflow-y-auto">
+      <div class="flex flex-wrap gap-2" id="modal-tag-list">
+        <button type="button" class="modal-tag-pill px-3 py-1.5 font-label-sm text-label-sm uppercase bg-primary-container text-on-primary-container font-semibold transition-all"
+          data-filter="all" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">#ALL</button>
+        {{- range $tagList }}
+        <button type="button" class="modal-tag-pill px-3 py-1.5 font-label-sm text-label-sm uppercase bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-all"
+          data-filter="{{ .slug }}" data-tag-name="{{ .slug }}" style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">
+          #{{ .name | upper }} <span class="font-code-snippet text-code-snippet text-secondary-container ml-1">{{ .count }}</span>
+        </button>
+        {{- end }}
+      </div>
+      <p id="modal-no-results" class="hidden font-body-sm text-body-sm text-on-surface-variant text-center py-space-md">Tag tidak ditemukan.</p>
+    </div>
+  </div>
+</div>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+  (function () {
+    var PER_PAGE = 6;
+    var searchInput = document.getElementById('article-search');
+    var filterButtons = Array.prototype.slice.call(document.querySelectorAll('.filter-btn'));
+    var articleCards = Array.prototype.slice.call(document.querySelectorAll('.article-card'));
+    var paginationEl = document.getElementById('pagination');
+    var noResults = document.getElementById('no-results');
+    var grid = document.getElementById('article-grid');
+
+    var filterContainer = document.getElementById('filter-container');
+    var featuredSlugs = ((filterContainer && filterContainer.getAttribute('data-featured')) || '').split(',').filter(Boolean);
+    var moreBtn = document.getElementById('more-tags-btn');
+
+    var modal = document.getElementById('tag-modal');
+    var modalPills = Array.prototype.slice.call(document.querySelectorAll('.modal-tag-pill'));
+    var modalSearch = document.getElementById('modal-tag-search');
+    var modalNoResults = document.getElementById('modal-no-results');
+    var closeBtn = document.getElementById('close-tag-modal');
+
+    var currentFilter = 'all';
+    var searchQuery = '';
+    var currentPage = 1;
+
+    function highlightButtons() {
+      filterButtons.forEach(function (b) {
+        var active = b.getAttribute('data-filter') === currentFilter;
+        b.classList.toggle('bg-primary-container', active);
+        b.classList.toggle('text-on-primary-container', active);
+        b.classList.toggle('font-semibold', active);
+        b.classList.toggle('bg-surface-container', !active);
+        b.classList.toggle('text-on-surface-variant', !active);
+      });
+      if (moreBtn) {
+        if (currentFilter === 'all' || featuredSlugs.indexOf(currentFilter) !== -1) {
+          moreBtn.textContent = 'MORE +';
+        } else {
+          moreBtn.textContent = '#' + currentFilter.toUpperCase() + ' +';
+        }
+      }
+    }
+
+    function applyFilter(slug) {
+      currentFilter = slug;
+      currentPage = 1;
+      highlightButtons();
+      updateGrid();
+    }
+
+    function matchingCards() {
+      return articleCards.filter(function (card) {
+        var tags = card.getAttribute('data-tags') || '';
+        var title = (card.querySelector('h2') || {}).textContent || '';
+        var desc = (card.querySelector('p') || {}).textContent || '';
+        var matchesFilter = currentFilter === 'all' || tags.split(' ').indexOf(currentFilter) !== -1;
+        var matchesSearch = title.toLowerCase().indexOf(searchQuery) !== -1 ||
+          desc.toLowerCase().indexOf(searchQuery) !== -1;
+        return matchesFilter && matchesSearch;
+      });
+    }
+
+    function renderPagination(totalPages) {
+      if (!paginationEl) return;
+      paginationEl.innerHTML = '';
+      if (totalPages <= 1) return;
+
+      function btn(label, page, active, disabled, ariaLabel) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = label;
+        b.className = 'w-10 h-10 flex items-center justify-center transition-colors rounded-DEFAULT shadow-sm ' +
+          (active
+            ? 'bg-primary-container text-on-primary-container font-semibold'
+            : 'bg-surface-container-low text-on-surface-variant hover:text-on-surface hover:bg-surface-container');
+        if (ariaLabel) b.setAttribute('aria-label', ariaLabel);
+        if (disabled) b.disabled = true;
+        else b.addEventListener('click', function () {
+          currentPage = page;
+          updateGrid();
+          if (grid) grid.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        });
+        paginationEl.appendChild(b);
+      }
+
+      btn('chevron_left', currentPage - 1, false, currentPage === 1, 'Previous Page');
+      for (var p = 1; p <= totalPages; p++) {
+        if (Math.abs(p - currentPage) > 2 && p !== 1 && p !== totalPages) {
+          if (Math.abs(p - currentPage) === 3) {
+            var span = document.createElement('span');
+            span.textContent = '...';
+            span.className = 'px-1 text-on-surface-variant/40';
+            paginationEl.appendChild(span);
+          }
+          continue;
+        }
+        btn(('0' + p).slice(-2), p, p === currentPage, false, 'Page ' + p);
+      }
+      btn('chevron_right', currentPage + 1, false, currentPage === totalPages, 'Next Page');
+    }
+
+    function updateGrid() {
+      var matches = matchingCards();
+      var totalPages = Math.max(1, Math.ceil(matches.length / PER_PAGE));
+      if (currentPage > totalPages) currentPage = totalPages;
+
+      var start = (currentPage - 1) * PER_PAGE;
+      var visible = matches.slice(start, start + PER_PAGE);
+
+      articleCards.forEach(function (card) { card.style.display = 'none'; });
+      visible.forEach(function (card) { card.style.display = 'flex'; });
+
+      if (noResults) {
+        if (matches.length === 0) {
+          noResults.classList.remove('hidden');
+          noResults.classList.add('flex');
+          if (grid) grid.classList.add('hidden');
+        } else {
+          noResults.classList.add('hidden');
+          noResults.classList.remove('flex');
+          if (grid) grid.classList.remove('hidden');
+        }
+      }
+      renderPagination(matches.length === 0 ? 0 : totalPages);
+    }
+
+    filterButtons.forEach(function (btnEl) {
+      btnEl.addEventListener('click', function () {
+        applyFilter(btnEl.getAttribute('data-filter'));
+      });
+    });
+
+    if (searchInput) {
+      searchInput.addEventListener('input', function (e) {
+        searchQuery = e.target.value.toLowerCase().trim();
+        currentPage = 1;
+        updateGrid();
+      });
+    }
+
+    /* --- Modal semua tag --- */
+    function openModal() {
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (modalSearch) {
+        modalSearch.value = '';
+        filterModalPills('');
+      }
+    }
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+    function filterModalPills(query) {
+      var visible = 0;
+      modalPills.forEach(function (pill) {
+        var name = (pill.getAttribute('data-tag-name') || 'all');
+        var text = pill.textContent.toLowerCase();
+        var match = query === '' || name.indexOf(query) !== -1 || text.indexOf(query) !== -1;
+        pill.style.display = match ? '' : 'none';
+        if (match) visible++;
+      });
+      if (modalNoResults) modalNoResults.classList.toggle('hidden', visible !== 0);
+    }
+
+    if (moreBtn) moreBtn.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (modal) {
+      modal.querySelectorAll('[data-modal-close]').forEach(function (el) {
+        el.addEventListener('click', closeModal);
+      });
+    }
+    modalPills.forEach(function (pill) {
+      pill.addEventListener('click', function () {
+        applyFilter(pill.getAttribute('data-filter'));
+        closeModal();
+      });
+    });
+    if (modalSearch) {
+      modalSearch.addEventListener('input', function (e) {
+        filterModalPills(e.target.value.toLowerCase().trim());
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) closeModal();
+    });
+
+    highlightButtons();
+    updateGrid();
+  })();
+</script>
+{{ end }}

@@ -1,4 +1,4 @@
 ---
 title: "Member"
-description: "Daftar anggota kelompok 6 mata kuliah Jaringan Komputer."
+description: "Daftar anggota mata kuliah Jaringan Komputer."
 ---

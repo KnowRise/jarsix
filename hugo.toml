@@ -1,12 +1,13 @@
 baseURL = 'https://jarsix.knowrise.my.id/'
 locale = 'id-id'
 title = 'JARSIX'
-theme = 'mytheme'
+# Dua theme tersedia: 'netblog' (baru, gaya mockup index.html) dan 'mytheme' (lama).
+# Ganti nilai di bawah untuk pindah theme, lalu build ulang.
+theme = 'netblog'
 
 [taxonomies]
   tag = 'tags'
-  category = 'categories'
 
 [params]
-  description = 'Blog sederhana milik kelompok 6 dalam mata kuliah Jaringan Komputer'
+  description = 'Blog sederhana mata kuliah Jaringan Komputer'
   author = 'KnowRise'

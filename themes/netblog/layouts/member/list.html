@@ -1,0 +1,111 @@
+{{ define "main" }}
+{{- $members := hugo.Data.members -}}
+{{- $postCount := len (where site.RegularPages "Section" "posts") -}}
+
+<!-- Hero Section -->
+<section class="relative w-full px-gutter py-space-xl overflow-hidden bg-surface-container-lowest">
+  <div class="absolute inset-0 pointer-events-none opacity-[0.03] bg-[radial-gradient(#ffd700_1px,transparent_1px)] [background-size:24px_24px]"></div>
+  <div class="max-w-7xl mx-auto flex flex-col gap-space-lg relative z-10">
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-space-md pb-space-lg bg-surface-container-low p-space-lg shadow-sm">
+      <div class="max-w-2xl space-y-space-xs">
+        <div class="flex items-center gap-space-xs">
+          <span class="inline-block w-2.5 h-2.5 bg-primary-container"></span>
+          <span class="font-label-sm text-label-sm tracking-widest uppercase text-primary-container">COMMUNITY REGISTRY // {{ now.Year }}</span>
+        </div>
+        <h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">{{ .Title }}</h1>
+        <p class="font-body-md text-body-md text-on-surface-variant max-w-xl">
+          {{ .Description | default "Para anggota kelompok yang berbagi tutorial dan studi kasus arsitektur jaringan di {{ site.Title }}." }}
+        </p>
+      </div>
+      <div class="flex flex-col sm:flex-row items-start sm:items-center gap-space-md">
+        <div class="flex items-center gap-space-sm bg-surface-container-high px-space-md py-space-sm shadow-sm">
+          <span class="font-code-snippet text-code-snippet text-primary-container font-semibold">{{ len $members }}</span>
+          <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Anggota Kelompok</span>
+        </div>
+        <div class="flex items-center gap-space-sm bg-surface-container-high px-space-md py-space-sm shadow-sm">
+          <span class="font-code-snippet text-code-snippet text-secondary-container font-semibold">{{ $postCount }}</span>
+          <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">Artikel Teknis</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Members Grid -->
+<section class="w-full px-gutter py-space-xl bg-surface">
+  <div class="max-w-7xl mx-auto">
+    {{- with $members }}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg" id="members-grid">
+      {{- range . }}
+      {{- $tag := dict "nama" .nama "nim" .nim "foto" .foto "url" .url -}}
+      <article class="member-card flex flex-col justify-between bg-surface-container p-space-lg shadow-md hover:shadow-xl transition-all relative [clip-path:polygon(0_0,calc(100%-12px)_0,100%_12px,100%_100%,0_100%)] group">
+        <div class="absolute top-0 right-0 w-3 h-3 bg-primary-container pointer-events-none opacity-80"></div>
+        <div>
+          <div class="flex items-start gap-space-md">
+            <div class="relative w-16 h-16 shrink-0 bg-surface-container-high overflow-hidden shadow-sm">
+              {{- if .foto }}
+              <a href="{{ printf "images/members/%s" .foto | relURL }}" target="_blank" rel="noopener noreferrer" class="block w-full h-full cursor-zoom-in" aria-label="Buka foto {{ .nama }}">
+                <img class="w-full h-full object-cover transition-opacity hover:opacity-80" src="{{ printf "images/members/%s" .foto | relURL }}" alt="Foto {{ .nama }}" loading="lazy" />
+              </a>
+              {{- else }}
+              <div class="w-full h-full flex items-center justify-center">
+                <span class="material-symbols-outlined text-on-surface-variant text-[28px]">person</span>
+              </div>
+              {{- end }}
+              <span class="absolute bottom-0 right-0 w-3 h-3 bg-secondary-container"></span>
+            </div>
+            <div class="space-y-0.5 min-w-0">
+              <div class="flex items-start gap-space-xs">
+                <h2 class="font-headline-sm text-headline-sm text-on-surface leading-tight break-words">{{ .nama }}</h2>
+                <span class="material-symbols-outlined text-primary-container text-[18px] shrink-0 mt-0.5" title="Anggota Kelompok">verified</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="mt-space-lg pt-space-md bg-surface-container-low -mx-space-lg -mb-space-lg px-space-lg pb-space-lg flex items-center justify-between pt-space-xs">
+          <span class="font-code-snippet text-code-snippet text-secondary-container font-medium">NIM {{ .nim }}</span>
+          {{- if .url }}
+          <a class="inline-flex items-center gap-1 font-label-sm text-label-sm text-primary-container group-hover:text-on-surface transition-colors font-medium"
+            href="{{ .url }}" target="_blank" rel="noopener noreferrer">
+            Lihat Profil <span class="material-symbols-outlined text-[14px]">arrow_forward</span>
+          </a>
+          {{- end }}
+        </div>
+      </article>
+      {{- end }}
+    </div>
+    {{- else }}
+    <p class="font-body-md text-body-md text-on-surface-variant">Belum ada data member. Tambahkan di <code class="font-code-snippet text-code-snippet text-secondary-container">data/members.yaml</code>.</p>
+    {{- end }}
+  </div>
+</section>
+
+<!-- Open Call CTA -->
+<section class="w-full px-gutter py-space-xl bg-surface-container-lowest relative overflow-hidden">
+  <div class="max-w-7xl mx-auto relative z-10">
+    <div class="relative bg-surface-container p-space-lg md:p-space-xl [clip-path:polygon(0_0,calc(100%-20px)_0,100%_20px,100%_100%,0_100%)] shadow-2xl">
+      <div class="absolute top-0 right-0 w-5 h-5 bg-primary-container"></div>
+      <div class="absolute -bottom-10 -right-10 w-48 h-48 bg-primary-container/5 rounded-full pointer-events-none blur-3xl"></div>
+      <div class="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-space-xl">
+        <div class="max-w-2xl space-y-space-sm">
+          <div class="flex items-center gap-space-xs">
+            <span class="font-code-snippet text-code-snippet text-secondary-container"># OPEN_CALL</span>
+            <span class="text-outline-variant font-label-sm text-label-sm">//</span>
+            <span class="font-label-sm text-label-sm text-on-surface-variant uppercase">COMMUNITY PIPELINE</span>
+          </div>
+          <h2 class="font-headline-lg text-headline-lg text-on-surface tracking-tight">Ingin Berbagi Pengalaman Jaringan?</h2>
+          <p class="font-body-md text-body-md text-on-surface-variant">
+            Jelajahi dokumentasi dan tutorial jaringan yang sudah dibuat oleh anggota kelompok.
+          </p>
+        </div>
+        <div class="flex items-stretch gap-space-md w-full lg:w-auto shrink-0">
+          <a class="relative px-space-lg py-3.5 bg-primary-container text-on-primary-container font-label-md text-label-md uppercase font-bold tracking-wider text-center transition-all hover:bg-primary-fixed shadow-md [clip-path:polygon(0_0,calc(100%-10px)_0,100%_10px,100%_100%,0_100%)] flex items-center justify-center gap-space-sm" href="{{ "tags/" | relURL }}">
+            <span class="material-symbols-outlined text-[18px]">topic</span>
+            <span>Jelajahi Topik</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{{ end }}

@@ -1,0 +1,49 @@
+{{- $tagSlugs := slice -}}
+{{- range (.Params.tags | default slice) -}}{{- $tagSlugs = $tagSlugs | append (. | urlize) -}}{{- end -}}
+
+<article class="article-card group flex flex-col bg-surface-container-low hover:bg-surface-container transition-all duration-300 shadow-sm"
+  data-tags="{{ delimit $tagSlugs " " }}"
+  data-title="{{ .Title }}"
+  style="clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);">
+  <a href="{{ .RelPermalink }}" class="relative block w-full h-48 overflow-hidden bg-surface-container-lowest" aria-label="{{ .Title }}">
+    {{ if .Params.coverImage }}
+      <img class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+        src="{{ .Params.coverImage | relURL }}" alt="{{ .Title }}" loading="lazy" />
+    {{ else }}
+      <div class="w-full h-full flex items-center justify-center">
+        <span class="material-symbols-outlined text-outline text-[48px]">lan</span>
+      </div>
+    {{ end }}
+  </a>
+
+  <div class="flex-1 p-space-md flex flex-col justify-between gap-space-md">
+    <div class="space-y-space-xs">
+      {{ with .Params.tags }}
+      <div class="flex flex-wrap gap-space-sm">
+        {{ range first 3 . }}
+        <a href="{{ printf "tags/%s/" (. | urlize) | relURL }}" class="font-label-sm text-label-sm text-secondary-container hover:text-secondary transition-colors">#{{ . | upper }}</a>
+        {{ end }}
+      </div>
+      {{ end }}
+      <h2 class="font-headline-md text-headline-sm text-on-surface group-hover:text-primary-container transition-colors line-clamp-2">
+        <a href="{{ .RelPermalink }}">{{ .Title }}</a>
+      </h2>
+      <p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-2 leading-relaxed">
+        {{ .Summary | plainify | truncate 140 }}
+      </p>
+    </div>
+    <div class="pt-space-sm border-t border-surface-container-highest/60 flex items-center justify-between text-on-surface-variant">
+      <div class="flex items-center gap-space-sm font-label-sm text-label-sm">
+        <span class="flex items-center gap-1">
+          <span class="material-symbols-outlined text-[16px] text-secondary-container">schedule</span>
+          {{ .ReadingTime }} min read
+        </span>
+        <span>&bull;</span>
+        <span>{{ partial "date-id.html" . }}</span>
+      </div>
+      <a class="font-label-sm text-label-sm text-on-surface group-hover:text-primary-container transition-colors" href="{{ .RelPermalink }}">
+        Baca Selengkapnya &rarr;
+      </a>
+    </div>
+  </div>
+</article>

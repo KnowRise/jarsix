@@ -1,0 +1,37 @@
+{{ define "main" }}
+<!-- Hero tag -->
+<section class="relative w-full overflow-hidden bg-surface-container-lowest py-space-xl px-gutter">
+  <div class="absolute -top-24 right-12 w-72 h-72 rounded-full bg-primary-container/5 blur-3xl pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto relative z-10 flex flex-col gap-space-sm">
+    <div class="flex items-center gap-space-xs font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">
+      <a href="{{ "tags/" | relURL }}" class="hover:text-primary-container transition-colors">TAKSONOMI TEKNIS</a>
+      <span class="text-on-surface-variant/40">/</span>
+      <span class="text-primary-container">TAG</span>
+    </div>
+    <h1 class="font-headline-xl text-headline-xl-mobile md:text-headline-xl text-on-surface tracking-tight">#{{ .Title | upper }}</h1>
+    <p class="font-body-md text-body-md text-on-surface-variant max-w-2xl">
+      <span class="font-code-snippet text-code-snippet text-secondary-container">{{ len .Pages }}</span>
+      artikel dengan tag ini.
+    </p>
+  </div>
+</section>
+
+<!-- Daftar artikel -->
+<section class="w-full px-gutter py-space-xl">
+  <div class="max-w-7xl mx-auto">
+    {{- if .Pages }}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-space-lg">
+      {{- range .Pages }}
+        {{- partial "post-card.html" . }}
+      {{- end }}
+    </div>
+    {{- else }}
+    <div class="flex flex-col items-center justify-center py-space-xl text-center">
+      <span class="material-symbols-outlined text-outline text-[48px] mb-space-sm">search_off</span>
+      <h3 class="font-headline-md text-headline-md text-on-surface">Belum Ada Artikel</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Belum ada artikel dengan tag ini.</p>
+    </div>
+    {{- end }}
+  </div>
+</section>
+{{ end }}

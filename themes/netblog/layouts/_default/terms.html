@@ -1,0 +1,247 @@
+{{ define "main" }}
+{{- $tagList := slice -}}
+{{- range $name, $tax := site.Taxonomies.tags -}}
+  {{- $tagList = $tagList | append (dict "name" $name "slug" ($name | urlize) "count" (len $tax)) -}}
+{{- end -}}
+{{- $tagList = sort $tagList "name" -}}
+{{- $byCount := sort $tagList "count" "desc" -}}
+{{- $featuredSlugs := slice -}}
+{{- range first 9 $byCount -}}{{- $featuredSlugs = $featuredSlugs | append .slug -}}{{- end -}}
+{{- $totalPosts := len (where site.RegularPages "Section" "posts") -}}
+
+<!-- Hero -->
+<section class="relative w-full overflow-hidden bg-surface py-space-xl px-gutter">
+  <div class="absolute -top-32 right-12 w-96 h-96 rounded-full bg-secondary-container/5 blur-3xl pointer-events-none"></div>
+  <div class="absolute bottom-0 left-1/4 w-80 h-80 rounded-full bg-primary-container/5 blur-3xl pointer-events-none"></div>
+  <div class="max-w-6xl mx-auto flex flex-col gap-space-lg relative z-10">
+    <div class="flex flex-wrap items-center justify-between gap-space-md">
+      <div class="flex items-center gap-space-xs font-label-sm text-label-sm uppercase tracking-widest text-on-surface-variant">
+        <span class="w-1.5 h-1.5 bg-primary-container"></span>
+        <span>TAKSONOMI TEKNIS</span>
+        <span class="text-on-surface-variant/40">/</span>
+        <span class="text-secondary">INDEX_V2</span>
+      </div>
+      <div class="flex items-center gap-space-sm font-code-snippet text-code-snippet text-on-surface-variant">
+        <span class="text-primary-container font-semibold">{{ len $tagList }}</span>
+        <span>TOPIK AKTIF</span>
+        <span class="text-on-surface-variant/40">&bull;</span>
+        <span class="text-secondary font-semibold">{{ $totalPosts }}</span>
+        <span>ARTIKEL TOTAL</span>
+      </div>
+    </div>
+    <div class="flex flex-col gap-space-xs">
+      <h1 class="font-headline-xl text-headline-xl text-on-surface tracking-tight">Indeks Topik &amp; Tag</h1>
+      <p class="font-body-lg text-body-lg text-on-surface-variant max-w-3xl">
+        Jelajahi seluruh tutorial dan dokumentasi berdasarkan teknologi jaringan, protokol, dan konfigurasi perangkat.
+      </p>
+    </div>
+    <!-- Search (lebar) -->
+    <div class="relative w-full max-w-3xl mt-space-sm">
+      <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[20px]">search</span>
+      <input class="w-full pl-12 pr-4 py-3.5 bg-surface-container-low text-on-surface placeholder:text-on-surface-variant/60 font-body-md text-body-md border border-outline-variant/30 focus:outline-none focus:border-secondary-container transition-all"
+        id="tag-search" placeholder="Search..." type="text"
+        style="clip-path: polygon(0 0, calc(100% - 12px) 0, 100% 12px, 100% 100%, 0 100%);" />
+    </div>
+  </div>
+</section>
+
+<!-- Tag Pills -->
+<div class="w-full bg-surface-container-lowest px-gutter py-space-xl">
+  <div class="max-w-6xl mx-auto flex flex-col gap-space-lg">
+    <div class="flex flex-wrap items-center justify-between gap-space-md pb-space-xs">
+      <div class="flex items-center gap-space-sm">
+        <span class="w-1.5 h-6 bg-primary-container"></span>
+        <h2 class="font-headline-md text-headline-md text-on-surface tracking-tight">Semua Topik</h2>
+        <span class="font-code-snippet text-code-snippet text-on-surface-variant/80 ml-space-xs" id="tags-count">
+          {{ if $featuredSlugs }}{{ len $featuredSlugs }} tag populer{{ end }}
+        </span>
+      </div>
+      <button type="button" id="show-all-tags"
+        class="px-space-md py-space-xs font-label-sm text-label-sm uppercase bg-surface-container text-secondary-container hover:text-on-surface hover:bg-surface-container-high transition-all font-semibold"
+        style="clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);">
+        Lihat Semua Tag ({{ len $tagList }})
+      </button>
+    </div>
+
+    {{- if $tagList }}
+    <div class="flex flex-wrap gap-space-sm" id="tags-grid">
+      {{- range $tagList }}
+      {{- $isFeatured := in $featuredSlugs .slug }}
+      <a class="tag-pill group inline-flex items-center gap-2 px-space-md py-space-sm bg-surface-container-low hover:bg-surface-container border border-outline-variant/20 transition-all"
+        data-tag-name="{{ .slug }}" data-featured="{{ if $isFeatured }}true{{ else }}false{{ end }}"
+        href="{{ printf "tags/%s/" .slug | relURL }}"
+        style="clip-path: polygon(0 0, calc(100% - 10px) 0, 100% 10px, 100% 100%, 0 100%);{{ if not $isFeatured }} display:none;{{ end }}">
+        <span class="w-2 h-2 rounded-full bg-primary-container group-hover:scale-125 transition-transform"></span>
+        <span class="font-label-md text-label-md text-on-surface group-hover:text-primary-container uppercase tracking-wide">#{{ .name | upper }}</span>
+        <span class="font-code-snippet text-code-snippet text-secondary-container">({{ .count }})</span>
+      </a>
+      {{- end }}
+    </div>
+    {{- else }}
+    <div class="flex flex-col items-center justify-center py-space-xl text-center">
+      <span class="material-symbols-outlined text-outline text-[48px] mb-space-sm">topic</span>
+      <h3 class="font-headline-md text-headline-md text-on-surface">Belum Ada Tag</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Tag akan muncul di sini setelah artikel pertama diterbitkan.</p>
+    </div>
+    {{- end }}
+
+    <!-- Empty state saat search tidak menemukan apa pun -->
+    <div class="hidden flex-col items-center justify-center py-space-xl text-center" id="no-results">
+      <span class="material-symbols-outlined text-outline text-[48px] mb-space-sm">search_off</span>
+      <h3 class="font-headline-md text-headline-md text-on-surface">Topik Tidak Ditemukan</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Coba kata kunci protokol lain seperti BGP, VLAN, atau subnetting.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Modal: Semua Tag -->
+<div id="tag-modal" class="fixed inset-0 z-[100] hidden" aria-hidden="true">
+  <div class="absolute inset-0 bg-surface/80 backdrop-blur-sm" data-modal-close></div>
+  <div class="absolute left-1/2 -translate-x-1/2 top-20 w-[92vw] max-w-2xl bg-surface-container border border-outline-variant/40 shadow-2xl"
+    style="clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 0 100%);">
+    <div class="flex items-center justify-between p-space-md border-b border-outline-variant/30">
+      <div class="flex items-center gap-space-sm">
+        <span class="w-2 h-2 bg-primary-container"></span>
+        <h3 class="font-headline-sm text-headline-sm text-on-surface uppercase tracking-wide">Semua Tag</h3>
+        <span class="font-code-snippet text-code-snippet text-on-surface-variant">({{ len $tagList }})</span>
+      </div>
+      <button type="button" id="close-tag-modal" aria-label="Tutup" class="w-8 h-8 flex items-center justify-center bg-surface-container-high text-on-surface-variant hover:text-on-surface transition-colors">
+        <span class="material-symbols-outlined text-[18px]">close</span>
+      </button>
+    </div>
+    <div class="p-space-md border-b border-outline-variant/30">
+      <div class="relative">
+        <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-on-surface-variant pointer-events-none text-[18px]">search</span>
+        <input id="modal-tag-search" type="text" placeholder="Search..."
+          class="w-full pl-9 pr-3 py-2 bg-surface-container-lowest border border-outline-variant/40 text-on-surface placeholder:text-on-surface-variant/60 font-body-sm text-body-sm rounded-DEFAULT focus:outline-none focus:border-secondary-container transition-colors" />
+      </div>
+    </div>
+    <div class="p-space-md max-h-[50vh] overflow-y-auto">
+      <div class="flex flex-wrap gap-2" id="modal-tag-list">
+        {{- range $tagList }}
+        <a class="modal-tag-pill inline-flex items-center gap-2 px-3 py-1.5 bg-surface-container-high hover:bg-surface-container transition-all"
+          data-tag-name="{{ .slug }}" href="{{ printf "tags/%s/" .slug | relURL }}"
+          style="clip-path: polygon(0 0, calc(100% - 6px) 0, 100% 6px, 100% 100%, 0 100%);">
+          <span class="font-label-sm text-label-sm text-on-surface-variant group-hover:text-on-surface uppercase">#{{ .name | upper }}</span>
+          <span class="font-code-snippet text-code-snippet text-secondary-container">({{ .count }})</span>
+        </a>
+        {{- end }}
+      </div>
+      <p id="modal-no-results" class="hidden font-body-sm text-body-sm text-on-surface-variant text-center py-space-md">Tag tidak ditemukan.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Contribute CTA -->
+<section class="w-full bg-surface py-space-xl px-gutter">
+  <div class="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-space-lg p-space-lg bg-surface-container-low rounded-DEFAULT"
+    style="clip-path: polygon(0 0, calc(100% - 16px) 0, 100% 16px, 100% 100%, 0 100%);">
+    <div class="flex flex-col gap-1">
+      <div class="flex items-center gap-2 font-label-sm text-label-sm uppercase tracking-wider text-primary-container">
+        <span class="w-2 h-2 rounded-full bg-primary-container animate-pulse"></span>
+        <span>DOKUMENTASI KOMUNITAS</span>
+      </div>
+      <h3 class="font-headline-md text-headline-md text-on-surface">Punya artikel atau analisis protokol baru?</h3>
+      <p class="font-body-sm text-body-sm text-on-surface-variant">Kontribusi writeup jaringan dan lab-mu langsung lewat CMS {{ site.Title }}.</p>
+    </div>
+    <a class="flex-shrink-0 px-6 py-3 bg-primary-container text-on-primary-container font-code-snippet text-code-snippet uppercase font-bold tracking-wider hover:opacity-90 transition-opacity"
+      href="{{ "admin/" | relURL }}" style="clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);">
+      [ AJUKAN WRITEUP ]
+    </a>
+  </div>
+</section>
+{{ end }}
+
+{{ define "scripts" }}
+<script>
+  (function () {
+    var searchInput = document.getElementById('tag-search');
+    var pills = Array.prototype.slice.call(document.querySelectorAll('.tag-pill'));
+    var noResults = document.getElementById('no-results');
+    var tagsCount = document.getElementById('tags-count');
+
+    var modal = document.getElementById('tag-modal');
+    var modalPills = Array.prototype.slice.call(document.querySelectorAll('.modal-tag-pill'));
+    var modalSearch = document.getElementById('modal-tag-search');
+    var modalNoResults = document.getElementById('modal-no-results');
+    var showAllBtn = document.getElementById('show-all-tags');
+    var closeBtn = document.getElementById('close-tag-modal');
+
+    var FEATURED_LABEL = tagsCount ? tagsCount.textContent.trim() : '';
+
+    function applyMainFilter() {
+      var query = searchInput ? searchInput.value.toLowerCase().trim() : '';
+      var visible = 0;
+
+      pills.forEach(function (pill) {
+        var name = pill.getAttribute('data-tag-name') || '';
+        var featured = pill.getAttribute('data-featured') === 'true';
+        var text = pill.textContent.toLowerCase();
+        var matchesQuery = query === '' || name.indexOf(query) !== -1 || text.indexOf(query) !== -1;
+        // Tanpa search: tampilkan yang featured saja; dengan search: semua yang cocok
+        var show = query === '' ? featured : matchesQuery;
+
+        pill.style.display = show ? 'inline-flex' : 'none';
+        if (show) visible++;
+      });
+
+      if (noResults) {
+        noResults.classList.toggle('hidden', visible !== 0);
+        noResults.classList.toggle('flex', visible === 0);
+      }
+      if (tagsCount) {
+        tagsCount.textContent = query === '' ? FEATURED_LABEL : visible + ' tag ditemukan';
+      }
+      if (showAllBtn) showAllBtn.style.display = query === '' ? '' : 'none';
+    }
+
+    function filterModalPills(query) {
+      var visible = 0;
+      modalPills.forEach(function (pill) {
+        var name = pill.getAttribute('data-tag-name') || '';
+        var text = pill.textContent.toLowerCase();
+        var match = query === '' || name.indexOf(query) !== -1 || text.indexOf(query) !== -1;
+        pill.style.display = match ? 'inline-flex' : 'none';
+        if (match) visible++;
+      });
+      if (modalNoResults) modalNoResults.classList.toggle('hidden', visible !== 0);
+    }
+
+    function openModal() {
+      if (!modal) return;
+      modal.classList.remove('hidden');
+      modal.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      if (modalSearch) {
+        modalSearch.value = '';
+        filterModalPills('');
+      }
+    }
+    function closeModal() {
+      if (!modal) return;
+      modal.classList.add('hidden');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+    }
+
+    if (searchInput) searchInput.addEventListener('input', applyMainFilter);
+    if (showAllBtn) showAllBtn.addEventListener('click', openModal);
+    if (closeBtn) closeBtn.addEventListener('click', closeModal);
+    if (modal) {
+      modal.querySelectorAll('[data-modal-close]').forEach(function (el) {
+        el.addEventListener('click', closeModal);
+      });
+    }
+    if (modalSearch) {
+      modalSearch.addEventListener('input', function (e) {
+        filterModalPills(e.target.value.toLowerCase().trim());
+      });
+    }
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && modal && !modal.classList.contains('hidden')) closeModal();
+    });
+
+    applyMainFilter();
+  })();
+</script>
+{{ end }}
